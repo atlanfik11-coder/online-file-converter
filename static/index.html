@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çevrimiçi Dosya Dönüştürme Merkezi | All-in-One File Converter</title>
+    <meta name="description" content="Ücretsiz, hızlı ve güvenli çevrimiçi dosya dönüştürücü. PDF to Word, Word to PDF, Görsel Dönüştürme, PDF Birleştirme ve Şifreleme işlemlerinizi saniyeler içinde yapın.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            950: '#0b0f19',
+                        },
+                        brand: {
+                            purple: '#a855f7',
+                            indigo: '#6366f1',
+                            pink: '#ec4899',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom animations & CSS -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            transition: all 0.3s ease;
+        }
+        .gradient-btn:hover {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            transform: translateY(-1px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-full flex flex-col antialiased">
+
+    <!-- Top Navigation Bar -->
+    <header class="w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-gradient-to-tr from-brand-purple to-brand-indigo rounded-xl shadow-lg shadow-indigo-500/20">
+                    <i data-lucide="refresh-cw" class="w-6 h-6 text-white animate-spin-slow"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
+                        CONVERT<span class="gradient-text">FAST</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 block -mt-1 tracking-wider uppercase font-semibold">Tüm Dosyalar Tek Yerde</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    Sunucu Aktif
+                </span>
+                <span class="text-xs text-slate-400 hidden sm:inline-flex items-center gap-1">
+                    <i data-lucide="shield" class="w-3.5 h-3.5 text-brand-purple"></i>
+                    %100 Güvenli & SSL Korumalı
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Header AdSense Space (Horizontal Banner) -->
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="glass-panel rounded-2xl p-4 flex items-center justify-center border border-dashed border-slate-700/60 bg-slate-900/30 min-h-[90px] text-center" id="adsense-header">
+            <div>
+                <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase block mb-1">REKLAM ALANI / ADVERTISING SPACE</span>
+                <span class="text-xs text-slate-400">Google AdSense - Banner [728x90]</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container Layout -->
+    <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex-grow flex flex-col lg:flex-row gap-6">
+        
+        <!-- Left Sidebar: Menu / Navigation Tabs -->
+        <aside class="w-full lg:w-72 flex flex-col gap-6 shrink-0">
+            <div class="glass-panel rounded-2xl p-5">
+                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 px-2">Dönüştürme Araçları</h2>
+                
+                <nav class="space-y-1.5" id="nav-tabs">
+                    <!-- Tab 1: PDF to Word -->
+                    <button data-tab="pdf-to-word" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 bg-gradient-to-r from-brand-purple/10 to-brand-indigo/10 text-white border border-brand-purple/30 shadow-md">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="file-text" class="w-4 h-4 text-purple-400"></i>
+                            PDF to Word (.docx)
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-80"></i>
+                    </button>
+
+                    <!-- Tab 2: Word to PDF -->
+                    <button data-tab="word-to-pdf" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="file-output" class="w-4 h-4 text-indigo-400"></i>
+                            Word to PDF (.pdf)
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </button>
+
+                    <!-- Tab 3: PDF to Image -->
+                    <button data-tab="pdf-to-image" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="file-image" class="w-4 h-4 text-emerald-400"></i>
+                            PDF to Image (JPG/PNG)
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
+                    </button>
+
+                    <!-- Tab 4: Image to PDF -->
+                    <button data-tab="image-to-pdf" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="images" class="w-4 h-4 text-blue-400"></i>
+                            Image to PDF
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
+                    </button>
+
+                    <!-- Tab 5: PDF Merge/Encrypt -->
+                    <button data-tab="pdf-merge-encrypt" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="lock" class="w-4 h-4 text-pink-400"></i>
+                            PDF Birleştir & Şifrele
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
+                    </button>
+
+                    <!-- Tab 6: Image Converter -->
+                    <button data-tab="convert-image" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="image" class="w-4 h-4 text-amber-400"></i>
+                            Görsel Dönüştürücü
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Sidebar AdSense Space (Vertical Banner) -->
+            <div class="glass-panel rounded-2xl p-4 flex items-center justify-center border border-dashed border-slate-700/60 bg-slate-900/30 min-h-[300px] text-center" id="adsense-sidebar">
+                <div>
+                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase block mb-1">REKLAM ALANI / ADVERTISING SPACE</span>
+                    <span class="text-xs text-slate-400">Google AdSense - SkyScraper [160x600 / 250x300]</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Side: Content Area (Active Tab Converter) -->
+        <section class="flex-grow flex flex-col gap-6">
+            
+            <!-- Converter Card Interface -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 flex flex-col relative overflow-hidden">
+                
+                <!-- Tool Title Header -->
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+                    <div>
+                        <h1 id="tool-title" class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                            PDF to Word (.docx)
+                        </h1>
+                        <p id="tool-desc" class="text-slate-400 text-sm mt-1">
+                            PDF dosyalarınızı düzenlenebilir Word (.docx) belgelerine yüksek kalitede dönüştürün.
+                        </p>
+                    </div>
+                    <div id="file-limits" class="shrink-0">
+                        <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-lg text-xs bg-slate-800 text-slate-300 font-medium">
+                            <i data-lucide="info" class="w-3.5 h-3.5 text-brand-purple"></i>
+                            Dosya Sınırı: 50 MB
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Form Area -->
+                <form id="converter-form" class="space-y-6 flex-grow flex flex-col">
+                    
+                    <!-- File Drag and Drop Zone -->
+                    <div id="drop-zone" class="w-full flex-grow border-2 border-dashed border-slate-700 hover:border-brand-purple/50 bg-slate-900/20 hover:bg-slate-900/40 rounded-2xl p-8 sm:p-12 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
+                        
+                        <!-- Input element (hidden) -->
+                        <input type="file" id="file-input" class="hidden" />
+
+                        <!-- File Input Guide -->
+                        <div id="upload-prompt" class="flex flex-col items-center space-y-4">
+                            <div class="p-4 bg-slate-850 rounded-2xl group-hover:scale-110 group-hover:bg-slate-800 transition-all duration-300 shadow-md">
+                                <i data-lucide="cloud-upload" class="w-10 h-10 text-brand-purple"></i>
+                            </div>
+                            <div>
+                                <p class="text-base font-semibold text-white">
+                                    Dosyaları buraya sürükleyip bırakın veya <span class="text-brand-purple underline decoration-dotted">göz atın</span>
+                                </p>
+                                <p id="accepted-formats" class="text-xs text-slate-400 mt-1">
+                                    Desteklenen format: .pdf
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Selected File Status Layout -->
+                        <div id="file-status" class="hidden w-full max-w-md bg-slate-850 border border-slate-700/80 p-4 rounded-xl flex items-center justify-between gap-3 shadow-lg">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <div class="p-2.5 bg-brand-purple/10 rounded-lg shrink-0">
+                                    <i data-lucide="file" class="w-5 h-5 text-brand-purple"></i>
+                                </div>
+                                <div class="text-left overflow-hidden">
+                                    <p id="file-name" class="text-sm font-semibold text-white truncate max-w-[200px] sm:max-w-[250px]"></p>
+                                    <p id="file-size" class="text-xs text-slate-400"></p>
+                                </div>
+                            </div>
+                            <button type="button" id="remove-file-btn" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-red-400 transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Options Section (Rendered dynamically depending on active tab) -->
+                    <div id="options-panel" class="hidden p-4 rounded-xl bg-slate-900/40 border border-slate-800">
+                        <!-- Dynamic content injected by app.js -->
+                    </div>
+
+                    <!-- Progress Indicator Box -->
+                    <div id="progress-box" class="hidden space-y-2.5">
+                        <div class="flex justify-between items-center text-xs">
+                            <span id="progress-status" class="text-slate-300 font-medium flex items-center gap-1.5">
+                                <i data-lucide="loader" class="w-3.5 h-3.5 animate-spin text-brand-purple"></i>
+                                Dosya yükleniyor ve dönüştürülüyor...
+                            </span>
+                            <span id="progress-percent" class="font-bold text-brand-purple">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-750">
+                            <div id="progress-bar" class="bg-gradient-to-r from-brand-purple to-brand-indigo h-full rounded-full transition-all duration-300 ease-out" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Action Button -->
+                    <button type="submit" id="submit-btn" disabled class="w-full py-4 px-6 rounded-xl font-bold text-white gradient-btn flex items-center justify-center gap-2 cursor-pointer shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
+                        <span id="submit-btn-text">Dönüştürmeyi Başlat</span>
+                    </button>
+                </form>
+
+            </div>
+
+            <!-- Below Action Area AdSense Space (Horizontal Banner) -->
+            <div class="glass-panel rounded-2xl p-4 flex items-center justify-center border border-dashed border-slate-700/60 bg-slate-900/30 min-h-[90px] text-center" id="adsense-action-bottom">
+                <div>
+                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase block mb-1">REKLAM ALANI / ADVERTISING SPACE</span>
+                    <span class="text-xs text-slate-400">Google AdSense - Inline Leaderboard [728x90]</span>
+                </div>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <!-- Footer AdSense Space (Horizontal Banner) -->
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-auto mb-6">
+        <div class="glass-panel rounded-2xl p-4 flex items-center justify-center border border-dashed border-slate-700/60 bg-slate-900/30 min-h-[90px] text-center" id="adsense-footer">
+            <div>
+                <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase block mb-1">REKLAM ALANI / ADVERTISING SPACE</span>
+                <span class="text-xs text-slate-400">Google AdSense - Large Mobile Banner / Leaderboard [320x100 / 970x90]</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Area -->
+    <footer class="w-full bg-slate-950/60 border-t border-slate-800/80 py-8 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-lg font-bold tracking-tight text-white">CONVERT<span class="gradient-text">FAST</span></span>
+                <span class="text-xs text-slate-500 border-l border-slate-700 pl-2">© 2026 Tüm Hakları Saklıdır.</span>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
+                <a href="#" class="hover:text-white transition-colors">Kullanım Koşulları</a>
+                <a href="#" class="hover:text-white transition-colors">Gizlilik Politikası</a>
+                <a href="#" class="hover:text-white transition-colors font-medium text-brand-purple">Sıfır Günlük Depolama Koruması</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Frontend logic app.js link -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
