@@ -392,6 +392,14 @@ async def serve_index():
     </html>
     """
 
+# Serve ads.txt at root level for Google AdSense verification
+@app.get("/ads.txt")
+async def serve_ads_txt():
+    ads_path = os.path.join("static", "ads.txt")
+    if os.path.exists(ads_path):
+        return FileResponse(ads_path, media_type="text/plain")
+    raise HTTPException(status_code=404, detail="ads.txt not found")
+
 # Mount the static directory for app.js and stylesheet assets
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
