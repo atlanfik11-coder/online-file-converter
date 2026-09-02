@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.atlamfik.opket",
-        "sha256_cert_fingerprints": ["19:31:DE:CE:75:B6:4C:FE:D9:B3:18:1D:87:8B:22:B8:5A:95:F0:10:F6:38:90:18:AE:FA:B9:80:DE:D0:FB:94"]
-      }
-    }]
