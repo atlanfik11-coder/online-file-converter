@@ -1,0 +1,64 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 484) rotate(90) scale(540)">
+      <stop stop-color="#171A24"/>
+      <stop offset="0.7" stop-color="#0B0D13"/>
+      <stop offset="1" stop-color="#080A10"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="260" y1="230" x2="776" y2="790" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5ED7FF"/>
+      <stop offset="0.38" stop-color="#BFF5FF"/>
+      <stop offset="0.68" stop-color="#5BA7FF"/>
+      <stop offset="1" stop-color="#4E78FF"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 512) rotate(90) scale(320)">
+      <stop stop-color="#4FC7FF" stop-opacity="0.16"/>
+      <stop offset="0.74" stop-color="#4FC7FF" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#4FC7FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="outerBlur" x="126" y="124" width="772" height="776" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    <filter id="softGlow" x="170" y="170" width="684" height="684" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="sparkGlow" x="0" y="0" width="1024" height="1024" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="228" fill="#F3F4F7"/>
+  <g>
+    <rect x="80" y="80" width="864" height="864" rx="220" fill="url(#bgGlow)"/>
+    <rect x="80.75" y="80.75" width="862.5" height="862.5" rx="219.25" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1.5"/>
+    <circle cx="512" cy="512" r="266" fill="url(#halo)"/>
+  </g>
+
+  <g filter="url(#outerBlur)" opacity="0.9">
+    <ellipse cx="512" cy="512" rx="248" ry="244" stroke="#64D8FF" stroke-width="34"/>
+  </g>
+
+  <g filter="url(#softGlow)">
+    <ellipse cx="512" cy="512" rx="248" ry="244" stroke="url(#ring)" stroke-width="24"/>
+  </g>
+
+  <g>
+    <ellipse cx="512" cy="512" rx="248" ry="244" stroke="url(#ring)" stroke-width="18"/>
+    <path d="M262 578C304 516 334 386 430 314C528 241 652 255 733 334" stroke="#53A9FF" stroke-opacity="0.58" stroke-width="10" stroke-linecap="round"/>
+    <path d="M322 702C400 744 548 756 657 686C748 627 802 533 814 432" stroke="#4E7FFF" stroke-opacity="0.5" stroke-width="10" stroke-linecap="round"/>
+    <path d="M258 420C287 339 353 267 443 235" stroke="#89EBFF" stroke-opacity="0.42" stroke-width="8" stroke-linecap="round"/>
+    <path d="M672 276C743 322 792 400 808 491" stroke="#6CC4FF" stroke-opacity="0.38" stroke-width="8" stroke-linecap="round"/>
+    <path d="M238 530C268 598 302 651 355 701" stroke="#3E78FF" stroke-opacity="0.32" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <g filter="url(#sparkGlow)">
+    <circle cx="794" cy="450" r="10" fill="#7EE9FF"/>
+    <circle cx="786" cy="450" r="26" fill="#56BFFF" fill-opacity="0.22"/>
+    <circle cx="226" cy="536" r="4" fill="#74C8FF"/>
+    <circle cx="304" cy="694" r="3.5" fill="#5A96FF"/>
+    <circle cx="720" cy="664" r="3.5" fill="#5C9FFF"/>
+    <circle cx="612" cy="810" r="4" fill="#6FD8FF"/>
+    <circle cx="360" cy="280" r="3" fill="#A4F1FF"/>
+    <circle cx="738" cy="308" r="3" fill="#95E7FF"/>
+  </g>
+</svg>
