@@ -418,6 +418,15 @@ async def serve_ads_txt():
         return FileResponse(ads_path, media_type="text/plain")
     raise HTTPException(status_code=404, detail="ads.txt not found")
 
+# Serve favicon.ico at root level for Google Search Crawler & Browsers
+@app.get("/favicon.ico")
+async def serve_favicon():
+    ico_path = os.path.join("static", "favicon.png")
+    if os.path.exists(ico_path):
+        return FileResponse(ico_path, media_type="image/png")
+    raise HTTPException(status_code=404, detail="Favicon not found")
+
+
 # Mount the static directory for app.js and stylesheet assets
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
