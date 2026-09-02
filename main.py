@@ -391,24 +391,18 @@ async def serve_converter():
         return FileResponse(converter_path, media_type="text/html")
     raise HTTPException(status_code=404, detail="Converter page not found")
 
-# Serve Opket App at /opket and /opket/*
-@app.get("/opket", response_class=HTMLResponse)
+# Redirect /opket and /opket/* to Opket Vercel app
+from fastapi.responses import RedirectResponse
+
+OPKET_URL = "https://opket.vercel.app"
+
+@app.get("/opket")
 @app.get("/opket/{file_path:path}")
 async def serve_opket(file_path: str = ""):
-    if not file_path or file_path.endswith("/"):
-        opket_index = os.path.join("static", "opket", "index.html")
-        if os.path.exists(opket_index):
-            return FileResponse(opket_index, media_type="text/html")
-        raise HTTPException(status_code=404, detail="Opket index not found")
-    
-    target_file = os.path.join("static", "opket", file_path)
-    if os.path.exists(target_file) and os.path.isfile(target_file):
-        return FileResponse(target_file)
-    
-    opket_index = os.path.join("static", "opket", "index.html")
-    if os.path.exists(opket_index):
-        return FileResponse(opket_index, media_type="text/html")
-    raise HTTPException(status_code=404, detail="Opket file not found")
+    if file_path:
+        return RedirectResponse(url=f"{OPKET_URL}/{file_path}", status_code=302)
+    return RedirectResponse(url=OPKET_URL, status_code=302)
+
 
 # Serve ads.txt at root level for Google AdSense verification
 @app.get("/ads.txt")
