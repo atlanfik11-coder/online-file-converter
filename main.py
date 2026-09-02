@@ -375,22 +375,40 @@ async def convert_image(
             shutil.rmtree(temp_dir)
         raise HTTPException(status_code=500, detail=f"Conversion error: {str(e)}")
 
-# Serve Static files and HTML index
+# Serve Static files and HTML index (Landing Hub)
 @app.get("/", response_class=HTMLResponse)
 async def serve_index():
     index_path = os.path.join("static", "index.html")
     if os.path.exists(index_path):
-        with open(index_path, "r", encoding="utf-8") as f:
-            return f.read()
-    return """
-    <html>
-        <head><title>Online File Converter</title></head>
-        <body style="font-family:sans-serif; text-align:center; padding-top:50px;">
-            <h1>Online File Converter</h1>
-            <p>Static index.html is missing. Please check backend files.</p>
-        </body>
-    </html>
-    """
+        return FileResponse(index_path, media_type="text/html")
+    return HTMLResponse("<h1>Game of PDF Portal</h1><p>index.html missing.</p>")
+
+# Serve PDF Converter App at /converter
+@app.get("/converter", response_class=HTMLResponse)
+async def serve_converter():
+    converter_path = os.path.join("static", "converter.html")
+    if os.path.exists(converter_path):
+        return FileResponse(converter_path, media_type="text/html")
+    raise HTTPException(status_code=404, detail="Converter page not found")
+
+# Serve Opket App at /opket and /opket/*
+@app.get("/opket", response_class=HTMLResponse)
+@app.get("/opket/{file_path:path}")
+async def serve_opket(file_path: str = ""):
+    if not file_path or file_path.endswith("/"):
+        opket_index = os.path.join("static", "opket", "index.html")
+        if os.path.exists(opket_index):
+            return FileResponse(opket_index, media_type="text/html")
+        raise HTTPException(status_code=404, detail="Opket index not found")
+    
+    target_file = os.path.join("static", "opket", file_path)
+    if os.path.exists(target_file) and os.path.isfile(target_file):
+        return FileResponse(target_file)
+    
+    opket_index = os.path.join("static", "opket", "index.html")
+    if os.path.exists(opket_index):
+        return FileResponse(opket_index, media_type="text/html")
+    raise HTTPException(status_code=404, detail="Opket file not found")
 
 # Serve ads.txt at root level for Google AdSense verification
 @app.get("/ads.txt")
@@ -407,3 +425,4 @@ if __name__ == "__main__":
     import uvicorn
     # Locally bind to 0.0.0.0:8000 for server environments
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
