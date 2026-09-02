@@ -3,10 +3,9 @@ FROM python:3.10-slim
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install lightweight system dependencies (Poppler for PDF->Image, LibreOffice-Writer for Word->PDF)
+# Install system dependencies (Poppler for PDF->Image, fontconfig)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     poppler-utils \
-    libreoffice-writer \
     fontconfig \
     && rm -rf /var/lib/apt/lists/*
 
