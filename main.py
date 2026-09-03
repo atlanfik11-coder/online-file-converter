@@ -11,8 +11,16 @@ from fastapi import FastAPI, UploadFile, File, Form, BackgroundTasks, HTTPExcept
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
-from pdf2docx import Converter
-from pdf2image import convert_from_path
+try:
+    from pdf2docx import Converter
+except Exception as e:
+    Converter = None
+
+try:
+    from pdf2image import convert_from_path
+except Exception as e:
+    convert_from_path = None
+
 from pypdf import PdfMerger, PdfReader, PdfWriter
 
 # Configure logging
@@ -24,6 +32,7 @@ app = FastAPI(
     description="Backend API for completely free All-in-One Online File Converter",
     version="1.0.0"
 )
+
 
 # Background task to clean up the temporary directory after a delay
 async def cleanup_temp_dir(dir_path: str, delay: int = 180):
@@ -430,7 +439,8 @@ if os.path.exists(STATIC_DIR):
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 10000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
 
 
 
