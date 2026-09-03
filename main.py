@@ -418,14 +418,17 @@ async def serve_favicon():
     ico_path = os.path.join("static", "favicon.png")
     if os.path.exists(ico_path):
         return FileResponse(ico_path, media_type="image/png")
-    raise HTTPException(status_code=404, detail="Favicon not found")
-
+@app.get("/healthz")
+async def health_check():
+    return {"status": "ok"}
 
 # Mount the static directory for app.js and stylesheet assets
-app.mount("/static", StaticFiles(directory="static"), name="static")
+if os.path.exists("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":
     import uvicorn
-    # Locally bind to 0.0.0.0:8000 for server environments
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
 
