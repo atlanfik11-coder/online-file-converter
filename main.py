@@ -375,10 +375,13 @@ async def convert_image(
             shutil.rmtree(temp_dir)
         raise HTTPException(status_code=500, detail=f"Conversion error: {str(e)}")
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+
 # Serve Static files and HTML index (Landing Hub)
 @app.get("/", response_class=HTMLResponse)
 async def serve_index():
-    index_path = os.path.join("static", "index.html")
+    index_path = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path, media_type="text/html")
     return HTMLResponse("<h1>Game of PDF Portal</h1><p>index.html missing.</p>")
@@ -386,13 +389,10 @@ async def serve_index():
 # Serve PDF Converter App at /converter
 @app.get("/converter", response_class=HTMLResponse)
 async def serve_converter():
-    converter_path = os.path.join("static", "converter.html")
+    converter_path = os.path.join(STATIC_DIR, "converter.html")
     if os.path.exists(converter_path):
         return FileResponse(converter_path, media_type="text/html")
     raise HTTPException(status_code=404, detail="Converter page not found")
-
-# Redirect /opket and /opket/* to Opket Vercel app
-from fastapi.responses import RedirectResponse
 
 OPKET_URL = "https://opket.vercel.app"
 
@@ -403,11 +403,10 @@ async def serve_opket(file_path: str = ""):
         return RedirectResponse(url=f"{OPKET_URL}/{file_path}", status_code=302)
     return RedirectResponse(url=OPKET_URL, status_code=302)
 
-
 # Serve ads.txt at root level for Google AdSense verification
 @app.get("/ads.txt")
 async def serve_ads_txt():
-    ads_path = os.path.join("static", "ads.txt")
+    ads_path = os.path.join(STATIC_DIR, "ads.txt")
     if os.path.exists(ads_path):
         return FileResponse(ads_path, media_type="text/plain")
     raise HTTPException(status_code=404, detail="ads.txt not found")
@@ -415,20 +414,23 @@ async def serve_ads_txt():
 # Serve favicon.ico at root level for Google Search Crawler & Browsers
 @app.get("/favicon.ico")
 async def serve_favicon():
-    ico_path = os.path.join("static", "favicon.png")
+    ico_path = os.path.join(STATIC_DIR, "favicon.png")
     if os.path.exists(ico_path):
         return FileResponse(ico_path, media_type="image/png")
+    raise HTTPException(status_code=404, detail="Favicon not found")
+
 @app.get("/healthz")
 async def health_check():
     return {"status": "ok"}
 
 # Mount the static directory for app.js and stylesheet assets
-if os.path.exists("static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+if os.path.exists(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 10000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
+
 
 
