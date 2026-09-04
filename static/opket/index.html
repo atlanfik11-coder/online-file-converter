@@ -1135,8 +1135,12 @@
                 </div>
             </div>
             
-            <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
-                <div class="status-pill" style="margin:0; background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.2); color:#34d399; font-size:9.5px; padding:3px 6px; font-weight:600; min-height:auto; white-space:nowrap;">
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                <div id="app-header-profile" style="display:inline-flex; align-items:center; gap:6px; background:rgba(30,41,59,0.85); padding:4px 10px; border-radius:20px; border:1px solid rgba(56,189,248,0.3); font-size:11px; color:#fff;">
+                    <img id="app-header-avatar" src="" alt="Avatar" style="width:22px; height:22px; border-radius:50%; object-fit:cover; display:none;">
+                    <span id="app-header-name" style="font-weight:700; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">-</span>
+                </div>
+                <div class="status-pill" style="margin:0; background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.2); color:#34d399; font-size:9.5px; padding:4px 8px; font-weight:600; min-height:auto; white-space:nowrap;">
                     <div id="st-dot" class="dot online" style="width:5px; height:5px; margin-right:3px;"></div>
                     <span id="st-lbl">Aktif</span>
                 </div>
@@ -5156,6 +5160,17 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 await this.loadRuntimeConfig();
                 if(!(await this.ensureServerSessionStillValid())) return;
                 await this.initCrypto();
+                if(this.role) {
+                    this.members[this.role] = {
+                        id: this.role,
+                        name: this.partnerName || 'Kullanıcı',
+                        emoji: this.myAv || '👤',
+                        owner: this.isCurrentUserOwner(),
+                        online: true,
+                        joinedAt: this.memberJoinedAt,
+                        presenceUpdatedAt: Date.now()
+                    };
+                }
                 this.updateUI();
                 if(!this.isLinked) this.refreshWelcomeConnectivity(true);
 
@@ -5700,6 +5715,24 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                     const ownerIdFromServer = String(result?.ownerId || '').trim();
                     if(ownerIdFromServer && ownerIdFromServer !== this.serverOwnerId) {
                         this.setServerOwnerState(ownerIdFromServer);
+                    }
+                    if(result?.members && typeof result.members === 'object') {
+                        let hasChanges = false;
+                        Object.values(result.members).forEach(m => {
+                            if(m && m.id) {
+                                this.members[m.id] = {
+                                    ...(this.members[m.id] || {}),
+                                    id: m.id,
+                                    name: m.name || 'Member',
+                                    emoji: m.emoji || '👤',
+                                    joinedAt: m.joinedAt || Date.now(),
+                                    online: m.online !== false,
+                                    owner: !!ownerIdFromServer && m.id === ownerIdFromServer
+                                };
+                                hasChanges = true;
+                            }
+                        });
+                        if(hasChanges) this.renderMembers();
                     }
                 }
                 return result?.ok !== false;
@@ -11495,6 +11528,16 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
 
             updateUI() {
                 try {
+                    const appAvatar = document.getElementById('app-header-avatar');
+                    const appName = document.getElementById('app-header-name');
+                    const curName = this.partnerName || window.currentUser?.displayName || localStorage.getItem('opket_profile_name') || 'Kullanıcı';
+                    const curAvatar = this.myAv || window.currentUser?.photoURL || localStorage.getItem('opket_profile_emoji') || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(curName) + '&background=2f80ed&color=fff');
+                    if (appAvatar && curAvatar) {
+                        appAvatar.src = curAvatar;
+                        appAvatar.style.display = 'block';
+                    }
+                    if (appName) appName.innerText = curName;
+
                     const t = LANGS[this.lang] || LANGS.en;
                     document.documentElement.lang = this.lang;
                     document.documentElement.dir = this.lang === 'ar' ? 'rtl' : 'ltr';
@@ -14949,6 +14992,14 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 if (headerProfile) headerProfile.style.display = 'flex';
                 if (headerAvatar) headerAvatar.src = avatarUrl;
                 if (headerName) headerName.innerText = nameStr;
+
+                const appHeaderAvatar = document.getElementById('app-header-avatar');
+                const appHeaderName = document.getElementById('app-header-name');
+                if (appHeaderAvatar) {
+                    appHeaderAvatar.src = avatarUrl;
+                    appHeaderAvatar.style.display = 'block';
+                }
+                if (appHeaderName) appHeaderName.innerText = nameStr;
 
                 if (mgmtAvatar) mgmtAvatar.src = avatarUrl;
                 if (mgmtName) mgmtName.innerText = nameStr;
