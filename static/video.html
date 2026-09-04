@@ -70,7 +70,7 @@
             <div class="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
                 <a href="/" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-750 text-slate-200 border border-slate-700/80 transition-all hover:scale-105 shadow-sm shrink-0">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-pink-400"></i>
-                    <span>Ana Sayfa</span>
+                    <span data-i18n="navHome">Ana Sayfa</span>
                 </a>
                 <div class="h-5 w-px bg-slate-800 hidden sm:block"></div>
                 <div class="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -406,8 +406,13 @@
             renderHistory();
         }
 
-        const videoTranslations = {
+        const translations = {
             tr: {
+                navHome: 'Ana Sayfa',
+                navVideo: 'Video İndirici',
+                navConverter: 'PDF Dönüştürücü',
+                navPrivacy: 'Gizlilik Politikası',
+                footerOpket: 'Opket Platformu',
                 status: 'Sistemler Aktif',
                 heroBadge: 'TikTok • YouTube • Instagram • X • Facebook • Pinterest',
                 heroTitle1: 'Reklamsız & Filigransız',
@@ -418,9 +423,15 @@
                 inputPlaceholder: 'Video bağlantı linkini buraya yapıştırın...',
                 btnPaste: 'Yapıştır',
                 qualityLabel: 'Kalite:',
-                btnSubmit: 'İNDİRMEYİ BAŞLAT'
+                btnSubmit: 'İNDİRMEYİ BAŞLAT',
+                copyright: '© 2026 Tüm Hakları Saklıdır.'
             },
             en: {
+                navHome: 'Home',
+                navVideo: 'Video Downloader',
+                navConverter: 'PDF Converter',
+                navPrivacy: 'Privacy Policy',
+                footerOpket: 'Opket Platform',
                 status: 'Systems Operational',
                 heroBadge: 'TikTok • YouTube • Instagram • X • Facebook • Pinterest',
                 heroTitle1: 'Ad-Free & No Watermark',
@@ -431,7 +442,8 @@
                 inputPlaceholder: 'Paste video link here...',
                 btnPaste: 'Paste',
                 qualityLabel: 'Quality:',
-                btnSubmit: 'START DOWNLOAD'
+                btnSubmit: 'START DOWNLOAD',
+                copyright: '© 2026 All Rights Reserved.'
             }
         };
 
