@@ -75,6 +75,10 @@
       "dest": "/main.py"
     },
     {
+      "src": "/ads\\.txt",
+      "dest": "/main.py"
+    },
+    {
       "src": "/converter/?$",
       "dest": "/static/converter.html"
     },

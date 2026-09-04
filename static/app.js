@@ -53,6 +53,24 @@ const tabConfig = {
         acceptLabel: 'Desteklenen formatlar: .png, .jpg, .jpeg, .webp',
         route: '/api/convert-image',
         defaultFilename: 'converted_image.png'
+    },
+    'pdf-compress': {
+        title: 'PDF Sıkıştırma (Compress PDF)',
+        desc: 'PDF dosyalarınızın boyutunu kalite kaybı yaşamadan küçültün.',
+        multiple: false,
+        accept: '.pdf',
+        acceptLabel: 'Desteklenen format: .pdf',
+        route: '/convert/compress-pdf',
+        defaultFilename: 'compressed.pdf'
+    },
+    'pdf-watermark': {
+        title: 'PDF Filigran Ekleme (Watermark)',
+        desc: 'PDF sayfalarınıza özel yazı veya filigran ekleyin.',
+        multiple: false,
+        accept: '.pdf',
+        acceptLabel: 'Desteklenen format: .pdf',
+        route: '/convert/watermark-pdf',
+        defaultFilename: 'watermarked.pdf'
     }
 };
 

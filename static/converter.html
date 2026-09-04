@@ -6,8 +6,8 @@
     <title>Game of PDF | Çevrimiçi Dosya Dönüştürme Merkezi</title>
     <meta name="description" content="Ücretsiz, hızlı ve güvenli çevrimiçi dosya dönüştürücü. PDF to Word, Word to PDF, Görsel Dönüştürme, PDF Birleştirme ve Şifreleme işlemlerinizi saniyeler içinde yapın.">
     <meta name="google-site-verification" content="dV1zb59Xse4wPUyw8yWEyCZCbFuuXoHvnyq19AfDhMg" />
-    <meta name="google-adsense-account" content="ca-pub-4068005201252941">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4068005201252941" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-8999159765450234">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8999159765450234" crossorigin="anonymous"></script>
     
     <!-- Favicon & Site Logo (Purple Converter Logo) -->
     <link rel="icon" type="image/png" sizes="32x32" href="/static/converter-logo.png?v=10">
@@ -36,8 +36,8 @@
     </script>
 
     <!-- Google AdSense Verification -->
-    <meta name="google-adsense-account" content="ca-pub-4068005201252941">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4068005201252941" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-8999159765450234">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8999159765450234" crossorigin="anonymous"></script>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -139,6 +139,10 @@
             </div>
             
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="inline-flex items-center gap-1.5 py-1 px-3 rounded-xl text-xs font-bold bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 transition-all cursor-pointer">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-purple-400"></i>
+                    <span id="langBtnText">🇬🇧 English</span>
+                </button>
                 <span class="inline-flex items-center gap-1.5 py-1 px-2 sm:px-3 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
                     <span class="sm:hidden">Aktif</span>
@@ -212,6 +216,24 @@
                         <span class="flex items-center gap-3">
                             <i data-lucide="image" class="w-4 h-4 text-amber-400"></i>
                             Görsel Dönüştürücü
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
+                    </button>
+
+                    <!-- Tab 7: PDF Compress -->
+                    <button data-tab="pdf-compress" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="minimize-2" class="w-4 h-4 text-cyan-400"></i>
+                            <span data-i18n="tabCompress">PDF Sıkıştırma</span>
+                        </span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
+                    </button>
+
+                    <!-- Tab 8: PDF Watermark -->
+                    <button data-tab="pdf-watermark" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
+                        <span class="flex items-center gap-3">
+                            <i data-lucide="stamp" class="w-4 h-4 text-rose-400"></i>
+                            <span data-i18n="tabWatermark">PDF Filigran Ekleme</span>
                         </span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
                     </button>
@@ -323,7 +345,7 @@
         <div class="glass-panel rounded-2xl p-4 flex items-center justify-center border border-dashed border-slate-700/60 bg-slate-900/30 min-h-[90px] text-center" id="adsense-footer">
             <ins class="adsbygoogle"
                  style="display:block; width:100%;"
-                 data-ad-client="ca-pub-4068005201252941"
+                 data-ad-client="ca-pub-8999159765450234"
                  data-ad-slot="footer-ad-unit"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>

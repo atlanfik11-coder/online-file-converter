@@ -430,6 +430,78 @@ async def convert_image(
             shutil.rmtree(temp_dir)
         raise HTTPException(status_code=500, detail=f"Conversion error: {str(e)}")
 
+@app.post("/convert/compress-pdf")
+async def compress_pdf(file: UploadFile = File(...)):
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Lütfen bir PDF dosyası yükleyin.")
+    temp_dir = tempfile.mkdtemp()
+    try:
+        input_path = os.path.join(temp_dir, "input.pdf")
+        output_path = os.path.join(temp_dir, "compressed.pdf")
+        with open(input_path, "wb") as f:
+            f.write(await file.read())
+            
+        reader = PdfReader(input_path)
+        writer = PdfWriter()
+        
+        for page in reader.pages:
+            page.compress_content_streams()
+            writer.add_page(page)
+            
+        with open(output_path, "wb") as f:
+            writer.write(f)
+            
+        out_name = f"compressed_{file.filename}"
+        return FileResponse(output_path, filename=out_name, media_type="application/pdf")
+    except Exception as e:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        raise HTTPException(status_code=500, detail=f"Sıkıştırma hatası: {str(e)}")
+
+@app.post("/convert/watermark-pdf")
+async def watermark_pdf(file: UploadFile = File(...), watermark_text: str = Form("Game of PDF")):
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Lütfen bir PDF dosyası yükleyin.")
+    temp_dir = tempfile.mkdtemp()
+    try:
+        input_path = os.path.join(temp_dir, "input.pdf")
+        watermark_pdf_path = os.path.join(temp_dir, "watermark.pdf")
+        output_path = os.path.join(temp_dir, "watermarked.pdf")
+        with open(input_path, "wb") as f:
+            f.write(await file.read())
+            
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.colors import Color
+        
+        reader = PdfReader(input_path)
+        writer = PdfWriter()
+        
+        for page in reader.pages:
+            width = float(page.mediabox.width)
+            height = float(page.mediabox.height)
+            
+            c = canvas.Canvas(watermark_pdf_path, pagesize=(width, height))
+            c.setFont("Helvetica-Bold", 36)
+            c.setFillColor(Color(0.5, 0.5, 0.5, alpha=0.3))
+            c.saveState()
+            c.translate(width / 2, height / 2)
+            c.rotate(45)
+            c.drawCentredString(0, 0, watermark_text)
+            c.restoreState()
+            c.save()
+            
+            wm_reader = PdfReader(watermark_pdf_path)
+            page.merge_page(wm_reader.pages[0])
+            writer.add_page(page)
+            
+        with open(output_path, "wb") as f:
+            writer.write(f)
+            
+        out_name = f"watermarked_{file.filename}"
+        return FileResponse(output_path, filename=out_name, media_type="application/pdf")
+    except Exception as e:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        raise HTTPException(status_code=500, detail=f"Filigran hatası: {str(e)}")
+
 @app.get("/healthz")
 async def health_check():
     return {
@@ -447,6 +519,11 @@ async def serve_google_verification_file():
 @app.get("/robots.txt")
 async def serve_robots_file():
     content = "User-agent: *\nAllow: /\n\nSitemap: https://gameofpdf.com/sitemap.xml"
+    return HTMLResponse(content, media_type="text/plain")
+
+@app.get("/ads.txt")
+async def serve_ads_file():
+    content = "google.com, pub-8999159765450234, DIRECT, f08c47fec0942fa0"
     return HTMLResponse(content, media_type="text/plain")
 
 @app.get("/sitemap.xml")

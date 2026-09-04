@@ -6,8 +6,8 @@
     <title>Game of PDF | Reklamsız & Filigransız Video İndirici</title>
     <meta name="description" content="TikTok filigransız video indir, YouTube MP4/MP3 indir, Instagram Reels indir, Twitter/X ve Facebook videolarını yüksek kalitede ücretsiz indir.">
     <meta name="google-site-verification" content="dV1zb59Xse4wPUyw8yWEyCZCbFuuXoHvnyq19AfDhMg" />
-    <meta name="google-adsense-account" content="ca-pub-4068005201252941">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4068005201252941" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-8999159765450234">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8999159765450234" crossorigin="anonymous"></script>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/static/downloader-favicon.png?v=15">
@@ -85,13 +85,13 @@
             </div>
             
             <div class="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-3 shrink-0">
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="inline-flex items-center gap-1.5 py-1 px-3 rounded-xl text-xs font-bold bg-pink-600/20 text-pink-300 border border-pink-500/30 hover:bg-pink-600/30 transition-all cursor-pointer">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-pink-400"></i>
+                    <span id="langBtnText">🇬🇧 English</span>
+                </button>
                 <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                    Sistemler Aktif
-                </span>
-                <span class="text-[10px] sm:text-xs text-slate-400 inline-flex items-center gap-1 whitespace-nowrap">
-                    <i data-lucide="shield" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-pink-400 shrink-0"></i>
-                    %100 Güvenli &amp; SSL Korumalı
+                    <span data-i18n="status">Sistemler Aktif</span>
                 </span>
             </div>
         </div>
@@ -406,9 +406,55 @@
             renderHistory();
         }
 
+        const videoTranslations = {
+            tr: {
+                status: 'Sistemler Aktif',
+                heroBadge: 'TikTok • YouTube • Instagram • X • Facebook • Pinterest',
+                heroTitle1: 'Reklamsız & Filigransız',
+                heroTitle2: 'Ultra Hızlı Video İndir',
+                heroSub: 'TikTok (yazısız), YouTube (MP4/MP3), Instagram Reels ve X videolarını doğrudan cihazınıza indirin.',
+                tabVideo: 'Video (MP4)',
+                tabAudio: 'Sadece Ses (MP3)',
+                inputPlaceholder: 'Video bağlantı linkini buraya yapıştırın...',
+                btnPaste: 'Yapıştır',
+                qualityLabel: 'Kalite:',
+                btnSubmit: 'İNDİRMEYİ BAŞLAT'
+            },
+            en: {
+                status: 'Systems Operational',
+                heroBadge: 'TikTok • YouTube • Instagram • X • Facebook • Pinterest',
+                heroTitle1: 'Ad-Free & No Watermark',
+                heroTitle2: 'Ultra Fast Video Downloader',
+                heroSub: 'Download TikTok videos (without watermark), YouTube (MP4/MP3), Instagram Reels & X videos directly to your device.',
+                tabVideo: 'Video (MP4)',
+                tabAudio: 'Audio Only (MP3)',
+                inputPlaceholder: 'Paste video link here...',
+                btnPaste: 'Paste',
+                qualityLabel: 'Quality:',
+                btnSubmit: 'START DOWNLOAD'
+            }
+        };
+
+        let currentLang = localStorage.getItem('site_lang') || 'tr';
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('site_lang', lang);
+            const btnText = document.getElementById('langBtnText');
+            if (btnText) {
+                btnText.textContent = lang === 'tr' ? '🇬🇧 English' : '🇹🇷 Türkçe';
+            }
+        }
+
+        function toggleLanguage() {
+            const nextLang = currentLang === 'tr' ? 'en' : 'tr';
+            applyLanguage(nextLang);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             renderHistory();
+            applyLanguage(currentLang);
         });
     </script>
 </body>
