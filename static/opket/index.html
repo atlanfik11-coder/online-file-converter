@@ -4936,8 +4936,8 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                     localStorage.setItem('opket_app_v_prev', savedVersion || '');
                     localStorage.setItem('opket_app_v', APP_VERSION);
                 }
-                const savedLang = localStorage.getItem('opket_l') || '';
-                this.lang = LANG_META[savedLang] ? savedLang : 'en';
+                const savedLang = localStorage.getItem('opket_l') || 'tr';
+                this.lang = LANG_META[savedLang] ? savedLang : 'tr';
                 localStorage.removeItem('opket_theme');
                 this.id = localStorage.getItem('opket_server_id') || '';
                 this.role = localStorage.getItem('opket_member_id') || '';
@@ -5732,18 +5732,32 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                         this.setServerOwnerState(ownerIdFromServer);
                     }
                     if(result?.members && typeof result.members === 'object') {
+                        const freshIds = new Set(Object.keys(result.members));
                         let hasChanges = false;
                         Object.values(result.members).forEach(m => {
                             if(m && m.id) {
+                                const existing = this.members[m.id];
+                                const newName = m.name || 'Member';
+                                const newEmoji = m.emoji || '👤';
+                                const newOnline = m.online !== false;
+                                const isOwner = !!ownerIdFromServer && m.id === ownerIdFromServer;
+                                if(!existing || existing.name !== newName || existing.emoji !== newEmoji || existing.online !== newOnline || existing.owner !== isOwner) {
+                                    hasChanges = true;
+                                }
                                 this.members[m.id] = {
-                                    ...(this.members[m.id] || {}),
+                                    ...(existing || {}),
                                     id: m.id,
-                                    name: m.name || 'Member',
-                                    emoji: m.emoji || '👤',
+                                    name: newName,
+                                    emoji: newEmoji,
                                     joinedAt: m.joinedAt || Date.now(),
-                                    online: m.online !== false,
-                                    owner: !!ownerIdFromServer && m.id === ownerIdFromServer
+                                    online: newOnline,
+                                    owner: isOwner
                                 };
+                            }
+                        });
+                        Object.keys(this.members).forEach(id => {
+                            if(!freshIds.has(id)) {
+                                delete this.members[id];
                                 hasChanges = true;
                             }
                         });
@@ -7194,13 +7208,14 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                     wrap.appendChild(card);
                 });
                 const note = document.getElementById('server-member-note');
-                const occupiedCount = members.length;
+                const totalMembers = Object.keys(this.members).length || members.length || 0;
+                const onlineMembers = this.getActiveMembers().length;
                 if(note) {
-                    note.innerText = this.formatLangText(
-                        'server_member_note',
-                        { count: occupiedCount, limit: this.getMaxMembersPerServer() },
-                        `${occupiedCount} / ${this.getMaxMembersPerServer()} people connected.`
-                    );
+                    if (this.lang === 'tr') {
+                        note.innerText = `${totalMembers} / ${this.getMaxMembersPerServer()} kayıtlı üye (${onlineMembers} çevrim içi)`;
+                    } else {
+                        note.innerText = `${totalMembers} / ${this.getMaxMembersPerServer()} registered members (${onlineMembers} online)`;
+                    }
                 }
                 this.renderHomeOverview();
                 this.updateServerControls();
@@ -7937,14 +7952,15 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
 
             getVoiceRoomSummary() {
                 const count = this.getCallRoomParticipantIds().length;
-                return this.formatLangText('count_people', { count }, count === 1 ? '1 person' : `${count} people`);
+                if (this.lang === 'tr') return `${count} kişi`;
+                return count === 1 ? '1 person' : `${count} people`;
             }
 
             getMusicRoomSummary() {
                 const track = this.getCurrentMusicTrack();
-                if(!track) return this.getLangText('music_room_waiting', 'Waiting');
+                if(!track) return this.lang === 'tr' ? 'Bekliyor' : 'Waiting';
                 const short = String(track.title || '').trim();
-                if(!short) return this.getLangText('music_room_live', 'Live');
+                if(!short) return this.lang === 'tr' ? 'Canlı' : 'Live';
                 return short.length > 26 ? `${short.slice(0, 26)}...` : short;
             }
 
@@ -7956,10 +7972,17 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 const musicChip = document.getElementById('home-music-chip');
                 const onlineChip = document.getElementById('home-online-chip');
                 const activeMembers = this.getActiveMembers().length;
+                const totalMembers = Object.keys(this.members).length;
                 if(ownerChip) ownerChip.innerText = ownerName || '-';
                 if(voiceChip) voiceChip.innerText = this.getVoiceRoomSummary();
                 if(musicChip) musicChip.innerText = this.getMusicRoomSummary();
-                if(onlineChip) onlineChip.innerText = this.formatLangText('count_people', { count: activeMembers }, activeMembers === 1 ? '1 person' : `${activeMembers} people`);
+                if(onlineChip) {
+                    if (this.lang === 'tr') {
+                        onlineChip.innerText = `${activeMembers} / ${totalMembers} kişi`;
+                    } else {
+                        onlineChip.innerText = `${activeMembers} / ${totalMembers} people`;
+                    }
+                }
             }
 
             isMemberInVoiceRoom(memberId) {

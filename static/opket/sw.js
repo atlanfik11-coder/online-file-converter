@@ -1,4 +1,4 @@
-const CACHE = 'opket-v120-google-auth-v2';
+const CACHE = 'opket-v121-member-presence-fix';
 const ASSETS = [
   './',
   './index.html',

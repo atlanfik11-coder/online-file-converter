@@ -104,7 +104,8 @@ function buildSessionSummary(doc, serverId, extra = {}) {
     ownerId: doc?.ownerId || '',
     serverSecret: extra.serverSecret || doc?.serverSecret || '',
     sessionToken: extra.sessionToken || '',
-    memberId: extra.memberId || ''
+    memberId: extra.memberId || '',
+    members: doc?.members || {}
   };
 }
 
