@@ -1,4 +1,4 @@
-const CACHE = 'opket-v114-realtime-broker-fix';
+const CACHE = 'opket-v120-google-auth-v2';
 const ASSETS = [
   './',
   './index.html',
