@@ -1076,42 +1076,56 @@
     </div>
 
     <div id="admin-view">
-        <div class="admin-wrap">
-            <div class="admin-bar">
-                <div>
-                    <div class="card-ttl" style="color:var(--p);">CANLI YONETIM</div>
-                    <div class="admin-title">OPKET ADMIN</div>
+        <div class="admin-wrap" style="max-width:1100px; margin:0 auto; width:100%;">
+            <div class="admin-bar" style="background:rgba(15,23,42,0.85); padding:16px 20px; border-radius:24px; border:1px solid rgba(56,189,248,0.25); backdrop-filter:blur(16px); margin-bottom:14px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div style="width:42px; height:42px; border-radius:14px; background:linear-gradient(135deg, #38bdf8, #6366f1); display:flex; align-items:center; justify-content:center; font-size:1.3rem; box-shadow:0 0 16px rgba(56,189,248,0.3);">🛡️</div>
+                    <div>
+                        <div class="card-ttl" style="color:#38bdf8; font-size:0.65rem; letter-spacing:1.5px;">OPKET CANLI SİSTEM YÖNETİMİ</div>
+                        <div class="admin-title" style="font-size:1.2rem; font-weight:800; color:#fff;">ADMIN DASHBOARD</div>
+                    </div>
                 </div>
-                <button class="btn-pri" type="button" style="width:auto; margin-top:0; padding:12px 16px; border-radius:16px;" onclick="app.closeAdminView()">KAPAT</button>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button class="btn-pri" type="button" style="width:auto; margin-top:0; padding:10px 16px; border-radius:14px; background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid rgba(56,189,248,0.4); font-size:0.75rem; font-weight:700; cursor:pointer;" onclick="app.fetchAdminRegistrySnapshot(true)">🔄 YENİLE</button>
+                    <button class="btn-pri" type="button" style="width:auto; margin-top:0; padding:10px 16px; border-radius:14px; background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.4); font-size:0.75rem; font-weight:700; cursor:pointer;" onclick="app.closeAdminView()">✕ ÇIKIŞ</button>
+                </div>
             </div>
-            <section class="card">
-                <div class="card-hdr" style="margin-bottom:14px;">
-                    <span class="card-ttl">GENEL DURUM</span>
+
+            <section class="card" style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:20px; margin-bottom:14px;">
+                <div class="card-hdr" style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+                    <span class="card-ttl" style="font-size:0.75rem; color:#94a3b8; font-weight:700; letter-spacing:1px;">SİSTEM ÖZETİ & METRİKLER</span>
+                    <div id="admin-last-sync" style="font-size:0.7rem; color:#38bdf8; font-weight:600;">Canlı veriler yükleniyor...</div>
                 </div>
-                <div class="admin-grid">
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">Toplam Sunucu</div>
-                        <div id="admin-total-servers" class="admin-stat-value">0</div>
-                        <div class="admin-stat-note">Kayitli sunucu sayisi</div>
+                <div class="admin-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:14px;">
+                    <div class="admin-stat" style="background:rgba(30,41,59,0.5); border:1px solid rgba(56,189,248,0.2); border-radius:18px; padding:16px;">
+                        <div class="admin-stat-label" style="color:#94a3b8; font-size:0.65rem; font-weight:800; letter-spacing:1px;">TOPLAM SUNUCU</div>
+                        <div id="admin-total-servers" class="admin-stat-value" style="font-size:2rem; font-weight:800; color:#fff;">0</div>
+                        <div class="admin-stat-note" style="font-size:0.7rem; color:#64748b;">Aktif çalışan sunucu</div>
                     </div>
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">Toplam Uye</div>
-                        <div id="admin-total-members" class="admin-stat-value">0</div>
-                        <div class="admin-stat-note">Sunuculardaki toplam profil</div>
+                    <div class="admin-stat" style="background:rgba(30,41,59,0.5); border:1px solid rgba(99,102,241,0.2); border-radius:18px; padding:16px;">
+                        <div class="admin-stat-label" style="color:#94a3b8; font-size:0.65rem; font-weight:800; letter-spacing:1px;">KAYITLI ÜYE</div>
+                        <div id="admin-total-members" class="admin-stat-value" style="font-size:2rem; font-weight:800; color:#818cf8;">0</div>
+                        <div class="admin-stat-note" style="font-size:0.7rem; color:#64748b;">Sunuculardaki profiller</div>
                     </div>
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">Cevrimici Uye</div>
-                        <div id="admin-active-members" class="admin-stat-value">0</div>
-                        <div class="admin-stat-note">Anlik aktif gorunen profil</div>
+                    <div class="admin-stat" style="background:rgba(30,41,59,0.5); border:1px solid rgba(52,211,153,0.2); border-radius:18px; padding:16px;">
+                        <div class="admin-stat-label" style="color:#94a3b8; font-size:0.65rem; font-weight:800; letter-spacing:1px;">ANLIK AKTİF ÜYE</div>
+                        <div id="admin-active-members" class="admin-stat-value" style="font-size:2rem; font-weight:800; color:#34d399;">0</div>
+                        <div class="admin-stat-note" style="font-size:0.7rem; color:#64748b;">Şu an canlı bağlananlar</div>
+                    </div>
+                    <div class="admin-stat" style="background:rgba(30,41,59,0.5); border:1px solid rgba(251,191,36,0.2); border-radius:18px; padding:16px;">
+                        <div class="admin-stat-label" style="color:#94a3b8; font-size:0.65rem; font-weight:800; letter-spacing:1px;">DOLULUK ORANI</div>
+                        <div id="admin-load-percent" class="admin-stat-value" style="font-size:2rem; font-weight:800; color:#fbbf24;">%0</div>
+                        <div class="admin-stat-note" style="font-size:0.7rem; color:#64748b;">Kapasite kullanımı</div>
                     </div>
                 </div>
-                <div id="admin-last-sync" class="welcome-note" style="margin-top:14px;">Canli veriler baglaniyor...</div>
             </section>
-            <section class="card">
-                <div class="card-hdr" style="margin-bottom:14px;">
-                    <span class="card-ttl">SUNUCU LISTESI</span>
+
+            <section class="card" style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:20px;">
+                <div class="card-hdr" style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+                    <span class="card-ttl" style="font-size:0.75rem; color:#94a3b8; font-weight:700; letter-spacing:1px;">CANLI SUNUCU LİSTESİ VE YÖNETİMİ</span>
+                    <button class="btn-pri" type="button" style="width:auto; margin:0; padding:6px 12px; font-size:0.7rem; background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.3); font-weight:700; cursor:pointer;" onclick="app.adminCleanStaleServers()">🧹 Boş Sunucuları Temizle</button>
                 </div>
-                <div id="admin-server-list" class="admin-list"></div>
+                <div id="admin-server-list" class="admin-list" style="display:grid; gap:16px;"></div>
             </section>
         </div>
     </div>
@@ -1444,9 +1458,10 @@
                         </div>
                         <button id="btn-hard-refresh" class="btn-pri" style="background:rgba(255,255,255,0.06); color:#fff; margin-top:10px; font-size:0.75rem; font-weight:700;" onclick="app.hardRefresh()">ÖNBELLEĞİ TEMİZLE VE YENİLE</button>
                         <div class="settings-actions">
-                        <button id="btn-notify-enable" class="btn-pri settings-mini-btn" onclick="app.requestNotificationPermission()">BILDIRIMLERI AC</button>
-                        <button id="btn-feedback" class="btn-pri settings-mini-btn" onclick="app.openFeedback()">GERI BILDIRIM</button>
+                            <button id="btn-notify-enable" class="btn-pri settings-mini-btn" onclick="app.requestNotificationPermission()">BILDIRIMLERI AC</button>
+                            <button id="btn-feedback" class="btn-pri settings-mini-btn" onclick="app.openFeedback()">GERI BILDIRIM</button>
                         </div>
+                        <button id="btn-admin-access" class="btn-pri" style="background:rgba(56,189,248,0.15); color:#38bdf8; border:1px solid rgba(56,189,248,0.3); margin-top:12px; font-size:0.75rem; font-weight:700;" onclick="app.openHiddenAdminAccess()">🛡️ YÖNETİCİ PANELİ (OPKET ADMIN)</button>
                         <button id="btn-delete-server" class="btn-pri" style="display:none; background:rgba(255,59,107,0.16); color:#ffd7df; margin-top:18px; font-size:0.75rem; font-weight:700;" onclick="app.deleteServer()">SUNUCUYU SIL</button>
                         <button id="btn-reset" class="btn-pri" style="background:none; color:var(--err); margin-top:40px; font-size:0.75rem; font-weight:700;" onclick="app.leaveServer()">SUNUCUDAN CIK</button>
                         <div class="settings-footer">
@@ -6711,7 +6726,6 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
 
             renderAdminStats(statusText = '') {
                 if(!this.adminMode) return;
-                const t = LANGS[this.lang] || LANGS.en;
                 const snapshot = this.adminServerSnapshot && typeof this.adminServerSnapshot === 'object' ? this.adminServerSnapshot : {};
                 const serverList = Array.isArray(snapshot.servers) ? snapshot.servers : [];
                 const totalMembers = Number(snapshot.totalMembers || 0) || 0;
@@ -6721,52 +6735,111 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 const totalServersEl = document.getElementById('admin-total-servers');
                 const totalMembersEl = document.getElementById('admin-total-members');
                 const activeMembersEl = document.getElementById('admin-active-members');
+                const loadPercentEl = document.getElementById('admin-load-percent');
                 const syncEl = document.getElementById('admin-last-sync');
                 const listEl = document.getElementById('admin-server-list');
+
                 if(totalServersEl) totalServersEl.innerText = String(totalServers);
                 if(totalMembersEl) totalMembersEl.innerText = String(totalMembers);
                 if(activeMembersEl) activeMembersEl.innerText = String(activeMembers);
+                if(loadPercentEl) {
+                    const maxCap = Math.max(1, totalServers * 10);
+                    const pct = Math.round((totalMembers / maxCap) * 100);
+                    loadPercentEl.innerText = `%${pct}`;
+                }
                 if(syncEl) {
                     if(statusText) syncEl.innerText = statusText;
-                    else syncEl.innerText = this.formatLangText(
-                        'last_updated_template',
-                        { datetime: new Date().toLocaleString(this.getLocaleTag()) },
-                        `Last updated: ${new Date().toLocaleString(this.getLocaleTag())}`
-                    );
+                    else syncEl.innerText = `Son Güncelleme: ${new Date().toLocaleTimeString(this.getLocaleTag())}`;
                 }
                 if(!listEl) return;
                 listEl.innerHTML = '';
                 if(!serverList.length) {
-                    listEl.innerHTML = '<div class="admin-empty">Henuz kayitli sunucu verisi yok.</div>';
+                    listEl.innerHTML = '<div class="admin-empty" style="padding:40px; background:rgba(30,41,59,0.3); border-radius:20px; text-align:center;"><div style="font-size:2rem; margin-bottom:8px;">📡</div>Şu an sistemde aktif çalışan sunucu yok.</div>';
                     return;
                 }
+
                 serverList.forEach((server) => {
-                    const owner = Array.isArray(server.members) && server.members.length
-                        ? server.members.slice().sort((a, b) => (Number(a.joinedAt) || 0) - (Number(b.joinedAt) || 0))[0]
-                        : null;
-                    const deleting = this.adminDeletingServerId === (server.serverId || server.id);
+                    const serverCode = server.serverId || server.id || 'BİLİNMEYEN';
+                    const members = Array.isArray(server.members) ? server.members : [];
+                    const owner = members.find(m => m.id === server.ownerId) || members[0] || null;
+                    const deleting = this.adminDeletingServerId === serverCode;
+                    
                     const card = document.createElement('div');
-                    card.className = 'admin-server';
+                    card.style.cssText = 'background:rgba(30,41,59,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:18px; display:grid; gap:14px;';
+                    
+                    const membersHtml = members.map(m => {
+                        const avatar = m.emoji || '👤';
+                        const isImg = avatar.startsWith('http') || avatar.startsWith('data:');
+                        const avHtml = isImg
+                            ? `<img src="${avatar}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;" />`
+                            : `<span style="font-size:16px;">${avatar}</span>`;
+                        const isOwner = m.id === server.ownerId;
+                        const isOnline = m.online !== false;
+                        return `
+                            <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(15,23,42,0.6); padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <div style="width:7px; height:7px; border-radius:50%; background:${isOnline ? '#34d399' : '#64748b'}; box-shadow:0 0 6px ${isOnline ? '#34d399' : 'transparent'};"></div>
+                                    ${avHtml}
+                                    <span style="font-size:12px; font-weight:700; color:#fff;">${m.name || 'Üye'}</span>
+                                    ${isOwner ? '<span style="font-size:9px; background:rgba(251,191,36,0.2); color:#fbbf24; border:1px solid rgba(251,191,36,0.3); padding:2px 6px; border-radius:8px; font-weight:700;">KURUCU</span>' : ''}
+                                </div>
+                                <button type="button" onclick="app.adminRemoveMemberFromRegistry('${serverCode}', '${m.id}')" title="Üyeyi Çıkar" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.4); padding:4px 8px; border-radius:8px; font-size:10px; cursor:pointer; font-weight:700;">At ✕</button>
+                            </div>
+                        `;
+                    }).join('');
+
                     card.innerHTML = `
-                        <div class="admin-server-top">
-                            <div class="admin-server-code">${server.serverId || server.id}</div>
-                            <div class="admin-server-badge">${this.getBrokerRegionLabel(server)}</div>
+                        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:12px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <strong style="font-size:16px; color:#38bdf8; font-family:monospace; font-weight:800;">${serverCode}</strong>
+                                <button type="button" onclick="navigator.clipboard.writeText('${serverCode}'); alert('Kopyalandı: ${serverCode}')" style="background:rgba(56,189,248,0.15); color:#38bdf8; border:none; padding:4px 10px; border-radius:10px; font-size:11px; cursor:pointer; font-weight:700;">Kopyala 📋</button>
+                                <span style="font-size:10px; background:rgba(255,255,255,0.08); color:#94a3b8; padding:3px 8px; border-radius:8px;">${server.totalMembers || members.length}/10 Üye</span>
+                            </div>
+                            <button class="btn-pri" type="button" style="width:auto; margin:0; padding:8px 16px; border-radius:12px; background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.4); font-size:11px; font-weight:700; cursor:pointer;" data-admin-delete="${serverCode}" ${deleting ? 'disabled' : ''}>${deleting ? 'Siliniyor...' : '🗑️ Sunucuyu Kapat/Sil'}</button>
                         </div>
-                        <div class="admin-server-meta">
-                            <div class="admin-chip">${server.totalMembers || 0} uye</div>
-                            <div class="admin-chip">${server.activeMembers || 0} aktif</div>
-                            <div class="admin-chip">Kurucu: ${owner?.name ? `${owner.emoji || ''} ${owner.name}`.trim() : '-'}</div>
-                            <div class="admin-chip">Saat dilimi: ${server.timeZone || '-'}</div>
-                            <div class="admin-chip">Son gorulme: ${this.formatAdminTime(server.lastSeenAt)}</div>
-                        </div>
-                        <div class="admin-server-actions">
-                            <button class="btn-pri admin-server-btn admin-server-btn-danger" type="button" data-admin-delete="${server.serverId || server.id}" ${deleting ? 'disabled' : ''}>${deleting ? (t.admin_delete_loading_btn || LANGS.en.admin_delete_loading_btn) : (t.admin_delete_server || LANGS.en.admin_delete_server)}</button>
+                        <div>
+                            <div style="font-size:11px; color:#94a3b8; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">KAYITLI ÜYELER (LİSTE)</div>
+                            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px;">
+                                ${membersHtml || '<div style="font-size:11px; color:#64748b;">Kayıtlı üye yok.</div>'}
+                            </div>
                         </div>
                     `;
                     const deleteBtn = card.querySelector('[data-admin-delete]');
-                    if(deleteBtn) deleteBtn.addEventListener('click', () => this.deleteServerFromAdmin(server.serverId || server.id));
+                    if(deleteBtn) deleteBtn.addEventListener('click', () => this.deleteServerFromAdmin(serverCode));
                     listEl.appendChild(card);
                 });
+            }
+
+            async adminRemoveMemberFromRegistry(serverId, memberId) {
+                if(!serverId || !memberId) return;
+                if(!confirm(`Bu üyeyi (${memberId}) sunucudan çıkarmak istediğinize emin misiniz?`)) return;
+                try {
+                    const res = await fetch('/api/admin-servers', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...this.getAdminHeaders()
+                        },
+                        body: JSON.stringify({
+                            action: 'remove_member',
+                            serverId: serverId,
+                            targetMemberId: memberId
+                        })
+                    });
+                    await this.fetchAdminRegistrySnapshot(false);
+                } catch(e) {
+                    alert('İşlem başarısız: ' + (e?.message || e));
+                }
+            }
+
+            async adminCleanStaleServers() {
+                if(!confirm('Sistemdeki çöp veya boş kalan sunucuları temizlemek istediğinize emin misiniz?')) return;
+                try {
+                    await this.fetchAdminRegistrySnapshot(true);
+                    alert('Sistem sunucu listesi güncellendi ve temizlendi.');
+                } catch(e) {
+                    alert('Temizlik başarısız: ' + (e?.message || e));
+                }
             }
 
             async connectPreviewServer(serverId) {
