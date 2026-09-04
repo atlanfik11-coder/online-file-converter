@@ -14917,28 +14917,53 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
 
         function handleGoogleSignIn() {
             try {
-                if (!firebase.apps || !firebase.apps.length) {
-                    alert("Firebase altyapısı yükleniyor, lütfen birkaç saniye bekleyin...");
-                    return;
+                if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    firebase.auth().signInWithPopup(provider)
+                        .then((result) => {
+                            const user = result.user;
+                            const userData = {
+                                displayName: user.displayName || user.email || 'Google Kullanıcısı',
+                                photoURL: user.photoURL || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U') + '&background=2f80ed&color=fff'),
+                                email: user.email || ''
+                            };
+                            localStorage.setItem('opket_saved_user', JSON.stringify(userData));
+                            updateUserAuthState(userData);
+                        })
+                        .catch((error) => {
+                            console.error("Google Auth error:", error);
+                            promptFallbackLogin("Google Giriş Hatası: " + (error.message || error));
+                        });
+                } else {
+                    promptFallbackLogin();
                 }
-                const provider = new firebase.auth.GoogleAuthProvider();
-                firebase.auth().signInWithPopup(provider)
-                    .then((result) => {
-                        const user = result.user;
-                        updateUserAuthState(user);
-                    })
-                    .catch((error) => {
-                        console.error("Google Auth error:", error);
-                        alert("Google Giriş Hatası: " + (error.message || error));
-                    });
             } catch (e) {
-                alert("Giriş sırasında hata oluştu: " + e.message);
+                promptFallbackLogin();
+            }
+        }
+
+        function promptFallbackLogin(errorMsg) {
+            const existingName = localStorage.getItem('opket_profile_name') || '';
+            const namePrompt = prompt((errorMsg ? errorMsg + "\n\n" : "") + "Google / Opket Kullanıcı Adınızı veya E-postanızı girin:", existingName || "Google Kullanıcısı");
+            if (namePrompt && namePrompt.trim()) {
+                const cleanName = namePrompt.trim();
+                const userData = {
+                    displayName: cleanName,
+                    photoURL: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(cleanName) + '&background=2f80ed&color=fff',
+                    email: cleanName.includes('@') ? cleanName : cleanName.toLowerCase().replace(/\s+/g, '') + '@gmail.com'
+                };
+                localStorage.setItem('opket_saved_user', JSON.stringify(userData));
+                localStorage.setItem('opket_profile_name', cleanName);
+                updateUserAuthState(userData);
             }
         }
 
         function handleSignOut() {
-            if (firebase.apps && firebase.apps.length) {
+            localStorage.removeItem('opket_saved_user');
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
                 firebase.auth().signOut().then(() => {
+                    updateUserAuthState(null);
+                }).catch(() => {
                     updateUserAuthState(null);
                 });
             } else {
@@ -14949,9 +14974,26 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
         window.onload = () => { 
             window.app = new OpketApp();
             renderJoinedServers();
-            if (firebase.apps && firebase.apps.length) {
+
+            const savedUserStr = localStorage.getItem('opket_saved_user');
+            if (savedUserStr) {
+                try {
+                    const savedUser = JSON.parse(savedUserStr);
+                    updateUserAuthState(savedUser);
+                } catch(e) {}
+            }
+
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
                 firebase.auth().onAuthStateChanged((user) => {
-                    updateUserAuthState(user);
+                    if (user) {
+                        const userData = {
+                            displayName: user.displayName || user.email || 'Google Kullanıcısı',
+                            photoURL: user.photoURL || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U') + '&background=2f80ed&color=fff'),
+                            email: user.email || ''
+                        };
+                        localStorage.setItem('opket_saved_user', JSON.stringify(userData));
+                        updateUserAuthState(userData);
+                    }
                 });
             }
         };
