@@ -440,6 +440,23 @@ async def health_check():
         "pypdf_loaded": PdfReader is not None
     }
 
+@app.get("/googlea587dd58ff1846df.html")
+async def serve_google_verification_file():
+    return HTMLResponse("google-site-verification: googlea587dd58ff1846df.html", media_type="text/html")
+
+@app.get("/robots.txt")
+async def serve_robots_file():
+    content = "User-agent: *\nAllow: /\n\nSitemap: https://gameofpdf.com/sitemap.xml"
+    return HTMLResponse(content, media_type="text/plain")
+
+@app.get("/sitemap.xml")
+async def serve_sitemap_file():
+    static_sitemap = os.path.join(os.path.dirname(__file__), "static", "sitemap.xml")
+    if os.path.exists(static_sitemap):
+        return FileResponse(static_sitemap, media_type="application/xml")
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://gameofpdf.com/</loc></url></urlset>'
+    return HTMLResponse(xml_content, media_type="application/xml")
+
 
 
 

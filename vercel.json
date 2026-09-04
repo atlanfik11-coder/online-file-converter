@@ -64,15 +64,15 @@
     },
     {
       "src": "/googlea587dd58ff1846df.html",
-      "dest": "/static/googlea587dd58ff1846df.html"
+      "dest": "/main.py"
     },
     {
       "src": "/sitemap.xml",
-      "dest": "/static/sitemap.xml"
+      "dest": "/main.py"
     },
     {
       "src": "/robots.txt",
-      "dest": "/static/robots.txt"
+      "dest": "/main.py"
     },
     {
       "src": "/(converter\\.html|video\\.html|google.*\\.html|converter-logo.*|downloader-logo\\.png|downloader-favicon.*|ads\\.txt|robots\\.txt|sitemap\\.xml|favicon.*|apple-touch-icon.*)",
