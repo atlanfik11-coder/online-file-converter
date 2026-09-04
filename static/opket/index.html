@@ -6218,7 +6218,7 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 const isOwner = this.isCurrentUserOwner();
                 const alone = !this.hasOtherPresentMembers();
                 if(deleteBtn) deleteBtn.style.display = isOwner ? 'block' : 'none';
-                if(leaveBtn) leaveBtn.style.display = isOwner && alone ? 'none' : 'block';
+                if(leaveBtn) leaveBtn.style.display = 'block';
             }
 
             rememberEventCatalog(memberId, list) {
