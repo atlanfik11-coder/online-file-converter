@@ -6900,6 +6900,7 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 if(!foundServer || this.previewServerDeleted) {
                     this.pendingServerId = '';
                     this.disconnectPreviewServer();
+                    if (typeof removeJoinedServer === 'function') removeJoinedServer(code);
                     alert(LANGS[this.lang]?.server_invalid || LANGS.en.server_invalid);
                     this.openWelcomePane('w-join-box');
                     return;
@@ -7004,6 +7005,11 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                     card.className = 'member-card' + (!member.online ? ' inactive' : '') + (canManage ? ' clickable' : '') + (menuOpen ? ' menu-open' : '') + (isSpeaking ? ' speaking' : '');
                     card.setAttribute('data-member-id', member.id);
                     const emojiClass = 'member-emoji' + (!member.online ? ' inactive' : '');
+                    const rawAvatar = member.emoji || (member.id === this.role ? this.myAv : '') || '👤';
+                    const isImageUrl = rawAvatar.startsWith('http://') || rawAvatar.startsWith('https://') || rawAvatar.startsWith('data:');
+                    const avatarHtml = isImageUrl
+                        ? `<img src="${rawAvatar}" alt="${memberName}" style="width:100%; height:100%; object-fit:cover; border-radius:18px;" />`
+                        : rawAvatar;
                     const pills = this.buildMemberActivityPills(member).join('');
                     const canTransfer = member.online !== false;
                     const memberName = member.name || 'Member';
@@ -7020,7 +7026,7 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                         : this.getLangText('member_restrict_desc', 'Blocks this member from music and movie search, queue, and playback controls.');
                     card.innerHTML = `
                         <div class="member-card-body">
-                            <div class="${emojiClass}">${member.emoji || '🙂'}</div>
+                            <div class="${emojiClass}">${avatarHtml}</div>
                             <div class="member-name">${memberName}</div>
                             <div class="member-status-row">${pills}</div>
                             <div class="member-meta">${this.getMemberLabel(member) || '&nbsp;'}</div>
@@ -7109,7 +7115,11 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
 
             getMemberDisplayEmoji(memberId, fallback = '') {
                 const member = this.members?.[memberId];
-                return (member?.emoji || fallback || (memberId === this.role ? this.myAv : '') || '🙂').slice(0, 8);
+                const val = member?.emoji || fallback || (memberId === this.role ? this.myAv : '') || '';
+                if (val.startsWith('http://') || val.startsWith('https://') || val.startsWith('data:')) {
+                    return '';
+                }
+                return val.slice(0, 8);
             }
 
             isRemoteCallRoomActive(memberId) {
@@ -7826,7 +7836,7 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
 
             renderHomeOverview() {
                 const ownerId = this.getEffectiveOwnerId();
-                const ownerName = ownerId ? `${this.getMemberDisplayEmoji(ownerId)} ${this.getMemberDisplayName(ownerId)}`.trim() : '-';
+                const ownerName = ownerId ? this.getMemberDisplayName(ownerId) : '-';
                 const ownerChip = document.getElementById('home-owner-chip');
                 const voiceChip = document.getElementById('home-voice-chip');
                 const musicChip = document.getElementById('home-music-chip');
@@ -14838,14 +14848,31 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
             }
         };
 
+        function getJoinedServersKey() {
+            const userKey = window.currentUser?.email || window.currentUser?.uid || localStorage.getItem('opket_profile_name') || 'guest';
+            return 'opket_joined_servers_' + userKey.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        }
+
         function saveJoinedServer(code) {
             if (!code) return;
             try {
-                let joined = JSON.parse(localStorage.getItem('opket_joined_servers') || '[]');
+                const key = getJoinedServersKey();
+                let joined = JSON.parse(localStorage.getItem(key) || '[]');
                 if (!joined.includes(code)) {
                     joined.unshift(code);
-                    localStorage.setItem('opket_joined_servers', JSON.stringify(joined.slice(0, 10)));
+                    localStorage.setItem(key, JSON.stringify(joined.slice(0, 10)));
                 }
+            } catch(e) {}
+            renderJoinedServers();
+        }
+
+        function removeJoinedServer(code) {
+            if (!code) return;
+            try {
+                const key = getJoinedServersKey();
+                let joined = JSON.parse(localStorage.getItem(key) || '[]');
+                joined = joined.filter(c => c !== code);
+                localStorage.setItem(key, JSON.stringify(joined));
             } catch(e) {}
             renderJoinedServers();
         }
@@ -14856,7 +14883,8 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
             if (!listEl) return;
             let joined = [];
             try {
-                joined = JSON.parse(localStorage.getItem('opket_joined_servers') || '[]');
+                const key = getJoinedServersKey();
+                joined = JSON.parse(localStorage.getItem(key) || '[]');
             } catch(e) {}
             
             if (countEl) countEl.innerText = (joined ? joined.length : 0) + " Sunucu";
@@ -14867,12 +14895,15 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
             }
 
             listEl.innerHTML = joined.map(code => `
-                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.05); padding:10px 14px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.05); padding:10px 14px; border-radius:14px; border:1px solid rgba(255,255,255,0.08); margin-bottom:6px;">
                     <div style="display:flex; align-items:center; gap:8px;">
                         <div style="width:8px; height:8px; border-radius:50%; background:#34d399; box-shadow:0 0 8px #34d399;"></div>
                         <strong style="color:#fff; font-size:13px; font-family:monospace;">${code}</strong>
                     </div>
-                    <button onclick="quickJoinServer('${code}')" style="background:#38bdf8; color:#000; font-weight:700; border:none; padding:6px 12px; border-radius:10px; font-size:11px; cursor:pointer;">Sunucuya Gir</button>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <button onclick="quickJoinServer('${code}')" style="background:#38bdf8; color:#000; font-weight:700; border:none; padding:6px 12px; border-radius:10px; font-size:11px; cursor:pointer;">Sunucuya Gir</button>
+                        <button onclick="removeJoinedServer('${code}')" title="Sunucuyu Listeden Sil" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.4); padding:6px 9px; border-radius:10px; font-size:11px; cursor:pointer; font-weight:700;">✕</button>
+                    </div>
                 </div>
             `).join('');
         }
