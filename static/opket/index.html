@@ -1065,9 +1065,7 @@
                             <div class="welcome-row">
                                 <div id="w-profile-title" class="card-ttl" style="font-size:0.7rem;">PROFİLİNİZİ SEÇİN</div>
                                 <input id="profile-name-input" class="inp" maxlength="24" placeholder="Adınızı girin">
-                                <div id="profile-emoji-label" class="welcome-note">Bir emoji seçip sunucuya giriş yapın.</div>
-                                <div id="emoji-picker" class="emoji-picker"></div>
-                                <button id="btn-enter-server" class="btn-pri" style="margin-top:0;" onclick="app.submitProfileSetup()">SUNUCUYA GİR</button>
+                                <button id="btn-enter-server" class="btn-pri" style="margin-top:10px;" onclick="app.submitProfileSetup()">SUNUCUYA GİR</button>
                             </div>
                         </div>
 
@@ -6909,12 +6907,13 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 this.openWelcomePane('w-profile-box');
             }
 
-            async submitProfileSetup() {
-                const name = document.getElementById('profile-name-input')?.value.trim();
-                if(!name || !this.myAv) {
-                    alert(LANGS[this.lang]?.profile_emoji_label || LANGS.en.profile_emoji_label);
-                    return;
+            async submitProfileSetup(nameOverride) {
+                const inputName = document.getElementById('profile-name-input')?.value.trim();
+                const name = nameOverride || inputName || window.currentUser?.displayName || localStorage.getItem('opket_profile_name') || 'Kullanıcı';
+                if (!this.myAv) {
+                    this.myAv = window.currentUser?.photoURL || localStorage.getItem('opket_av_m') || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=2f80ed&color=fff');
                 }
+                localStorage.setItem('opket_profile_name', name);
                 const serverId = (this.pendingServerId || this.id || '').trim().toUpperCase();
                 if(!serverId) {
                     alert(LANGS[this.lang]?.server_missing || LANGS.en.server_missing);
