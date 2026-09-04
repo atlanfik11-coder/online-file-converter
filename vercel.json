@@ -20,15 +20,11 @@
   "routes": [
     {
       "src": "/sitemap\\.xml",
-      "dest": "/main.py"
+      "dest": "/api/sitemap.js"
     },
     {
       "src": "/robots\\.txt",
-      "dest": "/main.py"
-    },
-    {
-      "src": "/googlea587dd58ff1846df\\.html",
-      "dest": "/main.py"
+      "dest": "/api/robots.js"
     },
     {
       "src": "/opket/?$",
@@ -55,7 +51,7 @@
       "dest": "/static/opket/sw.js"
     },
     {
-      "src": "/api/(admin-servers|admin-session|health|music-autoplay|music-search|realtime-auth|runtime-config|server-registry|download|download-file)",
+      "src": "/api/(admin-servers|admin-session|health|music-autoplay|music-search|realtime-auth|runtime-config|server-registry|download|download-file|sitemap|robots)",
       "dest": "/api/$1.js"
     },
     {
@@ -79,7 +75,7 @@
       "dest": "/static/video.html"
     },
     {
-      "src": "^/(?!static/|api/|healthz|convert/|opket|vendor|assets|sitemap\\.xml|robots\\.txt|googlea587dd58ff1846df\\.html).*$",
+      "src": "^/(?!static/|api/|healthz|convert/|opket|vendor|assets|sitemap\\.xml|robots\\.txt).*$",
       "dest": "/static/index.html"
     }
   ]
