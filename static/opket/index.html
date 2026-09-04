@@ -5711,7 +5711,6 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                     if(target[profile.id]) {
                         delete target[profile.id];
                         if(target === this.members) {
-                            if(profile.id === this.serverOwnerId) this.setServerOwnerState('');
                             delete this.memberRestrictions[profile.id];
                             this.saveMemberRestrictions();
                             delete this.callRoomMembers[profile.id];
@@ -6965,6 +6964,15 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                   localStorage.setItem('opket_name_p', this.partnerName);
                   localStorage.setItem('opket_linked', 'true');
                   this.isLinked = true;
+                  this.members[this.role] = {
+                      id: this.role,
+                      name: this.partnerName,
+                      emoji: this.myAv,
+                      owner: this.isCurrentUserOwner(),
+                      online: true,
+                      joinedAt: this.memberJoinedAt,
+                      presenceUpdatedAt: Date.now()
+                  };
                 this.startServerSessionMonitor();
                 await this.initCrypto();
                 this.disconnectPreviewServer();
