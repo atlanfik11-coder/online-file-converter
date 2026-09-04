@@ -276,8 +276,8 @@ if action == 'join' then
     nonce = authNonce,
     issuedAt = sessionIssuedAt
   }
-  if not doc.ownerId or doc.ownerId == '' or not doc.members[doc.ownerId] then
-    doc.ownerId = pickOwner(doc.members)
+  if not doc.ownerId or doc.ownerId == '' then
+    doc.ownerId = memberId
   end
   saveDoc(doc, ttl)
   redis.call('SADD', indexKey, serverId)
@@ -290,9 +290,6 @@ if action == 'leave' then
   end
   doc.members[memberId] = nil
   doc.sessions[memberId] = nil
-  if doc.ownerId == memberId or not doc.members[doc.ownerId] then
-    doc.ownerId = pickOwner(doc.members)
-  end
   saveDoc(doc, ttl)
   redis.call('SADD', indexKey, serverId)
   return encode({ ok = true, left = true, ownerId = doc.ownerId or '' })
@@ -335,9 +332,6 @@ if action == 'remove_member' then
   end
   doc.members[targetMemberId] = nil
   doc.sessions[targetMemberId] = nil
-  if doc.ownerId == targetMemberId or not doc.members[doc.ownerId] then
-    doc.ownerId = pickOwner(doc.members)
-  end
   saveDoc(doc, ttl)
   redis.call('SADD', indexKey, serverId)
   return encode({ ok = true, removed = true, ownerId = doc.ownerId or '', targetMemberId = targetMemberId })
