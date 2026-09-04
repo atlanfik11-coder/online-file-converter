@@ -21,6 +21,20 @@
     <script src="./vendor/firebase-auth-compat.js"></script>
     <script src="./vendor/firebase-firestore-compat.js"></script>
     <script src="./vendor/firebase-storage-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAStILegu3QAKvo8uUXUOJlgVNb94l2_Mc",
+            authDomain: "global-chat-d687e.firebaseapp.com",
+            projectId: "global-chat-d687e",
+            storageBucket: "global-chat-d687e.firebasestorage.app",
+            messagingSenderId: "686905298607",
+            appId: "1:686905298607:web:263bfb00274dede4c20e5a",
+            measurementId: "G-PRCWXGZBJ0"
+        };
+        if (typeof firebase !== 'undefined' && (!firebase.apps || !firebase.apps.length)) {
+            firebase.initializeApp(firebaseConfig);
+        }
+    </script>
     <!-- Lucide, MQTT & Confetti -->
     <script src="./vendor/lucide.js" defer></script>
     <script src="./vendor/mqtt.min.js"></script>
@@ -14917,23 +14931,37 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
 
         function handleGoogleSignIn() {
             try {
-                if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
-                    const provider = new firebase.auth.GoogleAuthProvider();
-                    firebase.auth().signInWithPopup(provider)
-                        .then((result) => {
-                            const user = result.user;
-                            const userData = {
-                                displayName: user.displayName || user.email || 'Google Kullanıcısı',
-                                photoURL: user.photoURL || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U') + '&background=2f80ed&color=fff'),
-                                email: user.email || ''
-                            };
-                            localStorage.setItem('opket_saved_user', JSON.stringify(userData));
-                            updateUserAuthState(userData);
-                        })
-                        .catch((error) => {
-                            console.error("Google Auth error:", error);
-                            promptFallbackLogin("Google Giriş Hatası: " + (error.message || error));
-                        });
+                if (typeof firebase !== 'undefined') {
+                    if (!firebase.apps || !firebase.apps.length) {
+                        if (typeof firebaseConfig !== 'undefined') {
+                            firebase.initializeApp(firebaseConfig);
+                        }
+                    }
+                    if (firebase.apps && firebase.apps.length) {
+                        const provider = new firebase.auth.GoogleAuthProvider();
+                        provider.addScope('email');
+                        provider.addScope('profile');
+                        firebase.auth().signInWithPopup(provider)
+                            .then((result) => {
+                                const user = result.user;
+                                const userData = {
+                                    displayName: user.displayName || user.email || 'Google Kullanıcısı',
+                                    photoURL: user.photoURL || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U') + '&background=2f80ed&color=fff'),
+                                    email: user.email || ''
+                                };
+                                localStorage.setItem('opket_saved_user', JSON.stringify(userData));
+                                updateUserAuthState(userData);
+                            })
+                            .catch((error) => {
+                                console.error("Google Auth error:", error);
+                                if (error.code === 'auth/unauthorized-domain') {
+                                    alert("Firebase Kurulum Bildirimi: 'gameofpdf.com' alan adını Firebase Console -> Authentication -> Settings -> Authorized Domains bölümüne eklemeniz gerekebilir.");
+                                }
+                                promptFallbackLogin("Google Giriş Hatası: " + (error.message || error));
+                            });
+                    } else {
+                        promptFallbackLogin();
+                    }
                 } else {
                     promptFallbackLogin();
                 }
