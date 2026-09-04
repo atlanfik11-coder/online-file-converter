@@ -19,6 +19,26 @@
   ],
   "routes": [
     {
+      "src": "/sitemap\\.xml",
+      "dest": "/static/sitemap.xml"
+    },
+    {
+      "src": "/robots\\.txt",
+      "dest": "/static/robots.txt"
+    },
+    {
+      "src": "/ads\\.txt",
+      "dest": "/static/ads.txt"
+    },
+    {
+      "src": "/googlea587dd58ff1846df\\.html",
+      "dest": "/static/googlea587dd58ff1846df.html"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
       "src": "/opket/?$",
       "dest": "/static/opket/index.html"
     },
@@ -67,10 +87,7 @@
       "dest": "/static/video.html"
     },
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/([^.]*)$",
+      "src": "^/(?!static/|api/|healthz|convert/|opket|vendor|assets).*$",
       "dest": "/static/index.html"
     }
   ]
