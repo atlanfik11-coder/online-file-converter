@@ -63,6 +63,18 @@
       "dest": "/main.py"
     },
     {
+      "src": "/googlea587dd58ff1846df.html",
+      "dest": "/static/googlea587dd58ff1846df.html"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/static/sitemap.xml"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/static/robots.txt"
+    },
+    {
       "src": "/(converter\\.html|video\\.html|google.*\\.html|converter-logo.*|downloader-logo\\.png|downloader-favicon.*|ads\\.txt|robots\\.txt|sitemap\\.xml|favicon.*|apple-touch-icon.*)",
       "dest": "/static/$1"
     },
