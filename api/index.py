@@ -9,34 +9,19 @@ import logging
 from typing import List
 from fastapi import FastAPI, UploadFile, File, Form, BackgroundTasks, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
-startup_error = None
+from fastapi.staticfiles import StaticFiles
+from PIL import Image
 try:
-    from PIL import Image
+    from pdf2docx import Converter
 except Exception as e:
-    Image = None
-    startup_error = f"PIL error: {e}"
+    Converter = None
 
 try:
-    from docx import Document
+    from pdf2image import convert_from_path
 except Exception as e:
-    Document = None
-    startup_error = f"docx error: {e}"
+    convert_from_path = None
 
-try:
-    from pypdf import PdfReader, PdfWriter
-except Exception as e:
-    PdfReader = None
-    PdfWriter = None
-    startup_error = f"pypdf error: {e}"
-
-try:
-    from reportlab.lib.pagesizes import A4
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-    from reportlab.lib import colors
-    reportlab_available = True
-except Exception as e:
-    reportlab_available = False
+from pypdf import PdfMerger, PdfReader, PdfWriter
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -89,22 +74,13 @@ async def pdf_to_word(
         with open(input_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        # Run conversion using pure Python pypdf + docx
-        reader = PdfReader(input_path)
-        doc = Document()
-        for idx, page in enumerate(reader.pages):
-            text = page.extract_text()
-            if text:
-                for line in text.splitlines():
-                    clean_line = line.strip()
-                    if clean_line:
-                        doc.add_paragraph(clean_line)
-            if idx < len(reader.pages) - 1:
-                doc.add_page_break()
-        doc.save(output_path)
+        # Run conversion
+        cv = Converter(input_path)
+        cv.convert(output_path, start=0, end=None)
+        cv.close()
         
         if not os.path.exists(output_path):
-            raise Exception("Word (.docx) belgesi oluşturulamadı.")
+            raise Exception("pdf2docx conversion failed to generate output file.")
         
         # Schedule cleanup task (3 minutes delay)
         background_tasks.add_task(cleanup_temp_dir, temp_dir)
@@ -138,60 +114,30 @@ async def word_to_pdf(
         with open(input_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
+        # Run LibreOffice headless conversion
+        # command: libreoffice --headless --convert-to pdf --outdir [temp_dir] [input_path]
+        cmd = [
+            "libreoffice",
+            "--headless",
+            "--convert-to", "pdf",
+            "--outdir", temp_dir,
+            input_path
+        ]
+        
+        logger.info(f"Running LibreOffice conversion command: {' '.join(cmd)}")
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=90)
+        
+        if result.returncode != 0:
+            logger.error(f"LibreOffice stdout: {result.stdout}")
+            logger.error(f"LibreOffice stderr: {result.stderr}")
+            raise Exception(f"LibreOffice conversion failed: {result.stderr}")
+        
+        # LibreOffice names the output file by replacing the extension with .pdf
         base_name = os.path.splitext(file.filename)[0]
         output_path = os.path.join(temp_dir, f"{base_name}.pdf")
         
-        doc = Document(input_path)
-        pdf_doc = SimpleDocTemplate(
-            output_path,
-            pagesize=A4,
-            rightMargin=40,
-            leftMargin=40,
-            topMargin=40,
-            bottomMargin=40
-        )
-        styles = getSampleStyleSheet()
-        story = []
-        
-        for p in doc.paragraphs:
-            text = p.text.strip()
-            if text:
-                safe_text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                style_name = getattr(p.style, 'name', '')
-                if style_name.startswith('Heading 1'):
-                    story.append(Paragraph(f"<b><font size=16>{safe_text}</font></b>", styles['Heading1']))
-                elif style_name.startswith('Heading 2'):
-                    story.append(Paragraph(f"<b><font size=14>{safe_text}</font></b>", styles['Heading2']))
-                elif style_name.startswith('Heading 3'):
-                    story.append(Paragraph(f"<b><font size=12>{safe_text}</font></b>", styles['Heading3']))
-                else:
-                    story.append(Paragraph(safe_text, styles['Normal']))
-                story.append(Spacer(1, 6))
-                
-        for table in doc.tables:
-            table_data = []
-            for row in table.rows:
-                row_data = [Paragraph(cell.text.strip().replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'), styles['Normal']) for cell in row.cells]
-                table_data.append(row_data)
-            if table_data:
-                t = Table(table_data)
-                t.setStyle(TableStyle([
-                    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#f1f5f9')),
-                    ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#cbd5e1')),
-                    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-                    ('BOTTOMPADDING', (0,0), (-1,-1), 4),
-                    ('TOPPADDING', (0,0), (-1,-1), 4),
-                ]))
-                story.append(t)
-                story.append(Spacer(1, 10))
-                
-        if not story:
-            story.append(Paragraph("(Boş Belge)", styles['Normal']))
-            
-        pdf_doc.build(story)
-        
         if not os.path.exists(output_path):
-            raise Exception("PDF belgesi oluşturulamadı.")
+            raise Exception("Output PDF file was not created by LibreOffice.")
         
         # Schedule cleanup
         background_tasks.add_task(cleanup_temp_dir, temp_dir)
@@ -230,35 +176,30 @@ async def pdf_to_image(
         with open(input_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        # Extract embedded images or render pages
-        reader = PdfReader(input_path)
-        img_count = 0
+        # Convert pages to images
+        images = convert_from_path(input_path)
+        
+        if not images:
+            raise Exception("No pages could be extracted from PDF.")
+        
+        # Write images to temporary directory and zip them
         with zipfile.ZipFile(zip_path, 'w') as zip_file:
-            for page_num, page in enumerate(reader.pages):
-                for img_num, image_file in enumerate(page.images):
-                    img_count += 1
-                    img_name = f"sayfa_{page_num+1}_gorsel_{img_num+1}_{image_file.name}"
-                    zip_file.writestr(img_name, image_file.data)
-            
-            # Fallback: render text pages onto high-res canvas
-            if img_count == 0:
-                from PIL import ImageDraw
-                import io
-                for page_num, page in enumerate(reader.pages):
-                    img = Image.new("RGB", (1240, 1754), (255, 255, 255))
-                    draw = ImageDraw.Draw(img)
-                    text = page.extract_text() or "(Metin Yok)"
-                    y = 60
-                    for line in text.splitlines():
-                        if y > 1680:
-                            break
-                        draw.text((60, y), line[:110], fill=(15, 23, 42))
-                        y += 26
-                    buf = io.BytesIO()
-                    save_fmt = "PNG" if img_format == "png" else "JPEG"
-                    img.save(buf, format=save_fmt)
-                    img_count += 1
-                    zip_file.writestr(f"sayfa_{page_num+1}.{img_format}", buf.getvalue())
+            for i, img in enumerate(images):
+                img_name = f"page_{i+1}.{img_format}"
+                img_path = os.path.join(temp_dir, img_name)
+                
+                # Save image
+                save_format = "PNG" if img_format == "png" else "JPEG"
+                if save_format == "JPEG" and img.mode in ("RGBA", "LA"):
+                    # Convert transparent background to white for JPEGs
+                    bg = Image.new("RGB", img.size, (255, 255, 255))
+                    bg.paste(img, mask=img.split()[3] if img.mode == "RGBA" else img.split()[1])
+                    bg.save(img_path, save_format)
+                else:
+                    img.save(img_path, save_format)
+                
+                # Add to ZIP
+                zip_file.write(img_path, img_name)
         
         background_tasks.add_task(cleanup_temp_dir, temp_dir)
         
@@ -340,7 +281,7 @@ async def pdf_merge_encrypt(
     merged_path = os.path.join(temp_dir, "merged.pdf")
     
     try:
-        merger = PdfWriter()
+        merger = PdfMerger()
         pdf_count = 0
         
         for file in files:
@@ -358,18 +299,31 @@ async def pdf_merge_encrypt(
         if pdf_count == 0:
             raise HTTPException(status_code=400, detail="No valid PDF files were uploaded.")
         
-        # Apply password encryption if requested
-        if password:
-            merger.encrypt(password)
-            
         merger.write(merged_path)
         merger.close()
         
+        output_path = merged_path
+        
+        # Apply password encryption if requested
+        if password:
+            reader = PdfReader(merged_path)
+            writer = PdfWriter()
+            
+            for page in reader.pages:
+                writer.add_page(page)
+                
+            writer.encrypt(password)
+            encrypted_path = os.path.join(temp_dir, "merged_secured.pdf")
+            
+            with open(encrypted_path, "wb") as f:
+                writer.write(f)
+            output_path = encrypted_path
+            
         background_tasks.add_task(cleanup_temp_dir, temp_dir)
         
         output_filename = "secured_document.pdf" if password else "merged_document.pdf"
         return FileResponse(
-            path=merged_path,
+            path=output_path,
             filename=output_filename,
             media_type="application/pdf"
         )
@@ -430,15 +384,57 @@ async def convert_image(
             shutil.rmtree(temp_dir)
         raise HTTPException(status_code=500, detail=f"Conversion error: {str(e)}")
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+
+# Serve Static files and HTML index (Landing Hub)
+@app.get("/", response_class=HTMLResponse)
+async def serve_index():
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path, media_type="text/html")
+    return HTMLResponse("<h1>Game of PDF Portal</h1><p>index.html missing.</p>")
+
+# Serve PDF Converter App at /converter
+@app.get("/converter", response_class=HTMLResponse)
+async def serve_converter():
+    converter_path = os.path.join(STATIC_DIR, "converter.html")
+    if os.path.exists(converter_path):
+        return FileResponse(converter_path, media_type="text/html")
+    raise HTTPException(status_code=404, detail="Converter page not found")
+
+OPKET_URL = "https://opket.vercel.app"
+
+@app.get("/opket")
+@app.get("/opket/{file_path:path}")
+async def serve_opket(file_path: str = ""):
+    if file_path:
+        return RedirectResponse(url=f"{OPKET_URL}/{file_path}", status_code=302)
+    return RedirectResponse(url=OPKET_URL, status_code=302)
+
+# Serve ads.txt at root level for Google AdSense verification
+@app.get("/ads.txt")
+async def serve_ads_txt():
+    ads_path = os.path.join(STATIC_DIR, "ads.txt")
+    if os.path.exists(ads_path):
+        return FileResponse(ads_path, media_type="text/plain")
+    raise HTTPException(status_code=404, detail="ads.txt not found")
+
+# Serve favicon.ico at root level for Google Search Crawler & Browsers
+@app.get("/favicon.ico")
+async def serve_favicon():
+    ico_path = os.path.join(STATIC_DIR, "favicon.png")
+    if os.path.exists(ico_path):
+        return FileResponse(ico_path, media_type="image/png")
+    raise HTTPException(status_code=404, detail="Favicon not found")
+
 @app.get("/healthz")
 async def health_check():
-    return {
-        "status": "ok",
-        "startup_error": startup_error,
-        "pil_loaded": Image is not None,
-        "docx_loaded": Document is not None,
-        "pypdf_loaded": PdfReader is not None
-    }
+    return {"status": "ok"}
+
+# Mount the static directory for app.js and stylesheet assets
+if os.path.exists(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 

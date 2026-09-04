@@ -3,17 +3,76 @@
   "builds": [
     {
       "src": "main.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
+    },
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "static/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "main.py"
-    },
-    {
       "src": "/static/(.*)",
       "dest": "/static/$1"
+    },
+    {
+      "src": "/opket/?$",
+      "dest": "/static/opket/index.html"
+    },
+    {
+      "src": "/opket/(.*)",
+      "dest": "/static/opket/$1"
+    },
+    {
+      "src": "/vendor/(.*)",
+      "dest": "/static/opket/vendor/$1"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/static/opket/assets/$1"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/static/opket/manifest.json"
+    },
+    {
+      "src": "/sw.js",
+      "dest": "/static/opket/sw.js"
+    },
+    {
+      "src": "/api/(admin-servers|admin-session|health|music-autoplay|music-search|realtime-auth|runtime-config|server-registry|download|download-file)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/main.py"
+    },
+    {
+      "src": "/convert/(.*)",
+      "dest": "/main.py"
+    },
+    {
+      "src": "/healthz",
+      "dest": "/main.py"
+    },
+    {
+      "src": "/(converter\\.html|video\\.html|google.*\\.html|converter-logo.*|downloader-logo\\.png|downloader-favicon.*|ads\\.txt|robots\\.txt|sitemap\\.xml|favicon.*|apple-touch-icon.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/converter/?$",
+      "dest": "/static/converter.html"
+    },
+    {
+      "src": "/video/?$",
+      "dest": "/static/video.html"
     },
     {
       "src": "/(.*)",
