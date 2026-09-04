@@ -19,26 +19,6 @@
   ],
   "routes": [
     {
-      "src": "/sitemap\\.xml",
-      "dest": "/static/sitemap.xml"
-    },
-    {
-      "src": "/robots\\.txt",
-      "dest": "/static/robots.txt"
-    },
-    {
-      "src": "/ads\\.txt",
-      "dest": "/static/ads.txt"
-    },
-    {
-      "src": "/googlea587dd58ff1846df\\.html",
-      "dest": "/static/googlea587dd58ff1846df.html"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
       "src": "/opket/?$",
       "dest": "/static/opket/index.html"
     },
@@ -86,7 +66,9 @@
       "src": "/video/?$",
       "dest": "/static/video.html"
     },
-    { "handle": "filesystem" },
+    {
+      "handle": "filesystem"
+    },
     {
       "src": "/(.*)",
       "dest": "/static/index.html"
