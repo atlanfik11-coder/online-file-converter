@@ -772,6 +772,148 @@
             .server-stat-grid { grid-template-columns: 1fr 1fr; }
             .server-copy { width: 100%; min-width: 0; }
         }
+        /* ════════════════════════════════════════
+           FUTURISTIC DASHBOARD REDESIGN (REF: OPKET SHARED TABLET)
+        ════════════════════════════════════════ */
+        .opket-dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 900px) {
+            .opket-dashboard-grid {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+        
+        /* Hexagonal Server Cluster Grid */
+        .hex-cluster-card {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(56, 189, 248, 0.22);
+            border-radius: 28px;
+            padding: 22px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 0 25px rgba(56, 189, 248, 0.04);
+        }
+        .hex-grid-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+            gap: 6px;
+        }
+        .hex-row-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: -10px;
+        }
+        .hex-node {
+            width: 44px;
+            height: 50px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: rgba(16, 185, 129, 0.12);
+            border: 1.5px solid rgba(16, 185, 129, 0.5);
+        }
+        .hex-node::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.35) 0%, rgba(16, 185, 129, 0.05) 100%);
+            z-index: 1;
+        }
+        .hex-node.online {
+            border-color: #34d399;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
+        }
+        .hex-node.warning {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.12);
+        }
+        .hex-node.warning::before {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, rgba(245, 158, 11, 0.05) 100%);
+        }
+        .hex-node:hover {
+            transform: scale(1.22);
+            z-index: 10;
+            filter: brightness(1.3);
+        }
+        .hex-inner-icon {
+            z-index: 2;
+            width: 16px;
+            height: 16px;
+            color: #34d399;
+        }
+        .hex-node.warning .hex-inner-icon {
+            color: #fbbf24;
+        }
+        
+        /* Cyber Waveform Card */
+        .cyber-card {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 18px;
+            backdrop-filter: blur(25px);
+            margin-bottom: 14px;
+            transition: all 0.3s ease;
+        }
+        .cyber-card:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+        .waveform-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 48px;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .waveform-bar {
+            width: 4px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #38bdf8 0%, #818cf8 100%);
+            animation: wavePulse 1.2s infinite ease-in-out alternate;
+        }
+        @keyframes wavePulse {
+            0% { height: 15%; opacity: 0.3; }
+            100% { height: 100%; opacity: 1; filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8)); }
+        }
+        
+        /* Cyber Analytics Graph Card */
+        .analytics-card {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 28px;
+            padding: 22px;
+            backdrop-filter: blur(30px);
+            margin-top: 14px;
+        }
+        .analytics-graph-container {
+            width: 100%;
+            height: 120px;
+            position: relative;
+            margin-top: 10px;
+        }
+        .analytics-graph-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
     </style>
 </head>
 <body>
@@ -953,34 +1095,170 @@
                 
                 <!-- TAB: HOME -->
                 <div id="tab-home" class="tab-content active">
-                    <section class="card server-shell">
-                        <div class="server-presence-hero">
-                            <div class="server-presence-main">
-                                <div id="home-server-title" class="card-ttl" style="color:var(--p);">AKTİF SUNUCU</div>
-                                <div id="server-code-view" class="welcome-code" style="font-size:1rem; margin-top:10px;">-</div>
-                                <div id="server-member-note" class="welcome-note" style="margin-top:8px;">0 / 10 kişi bağlı.</div>
-                            </div>
-                            <div class="server-stat-grid">
-                                <div class="server-stat-chip">
-                                    <span id="home-owner-label">Kurucu</span>
-                                    <strong id="home-owner-chip">-</strong>
+                    <!-- Opket Shared Futuristic Dashboard Grid -->
+                    <div class="opket-dashboard-grid">
+                        
+                        <!-- Left Column: Honeycomb Server Status & Stats -->
+                        <div style="display:flex; flex-direction:column; gap:16px;">
+                            <!-- Active Server Info Card -->
+                            <section class="card server-shell">
+                                <div class="server-presence-hero">
+                                    <div class="server-presence-main">
+                                        <div id="home-server-title" class="card-ttl" style="color:var(--s);">OPKET SHARED SERVERS</div>
+                                        <div id="server-code-view" class="welcome-code" style="font-size:1rem; margin-top:6px;">-</div>
+                                        <div id="server-member-note" class="welcome-note" style="margin-top:6px;">0 / 10 kişi bağlı.</div>
+                                    </div>
+                                    <div class="server-stat-grid">
+                                        <div class="server-stat-chip">
+                                            <span id="home-owner-label">Kurucu</span>
+                                            <strong id="home-owner-chip">-</strong>
+                                        </div>
+                                        <div class="server-stat-chip">
+                                            <span id="home-voice-label">Sesli Oda</span>
+                                            <strong id="home-voice-chip">0 kişi</strong>
+                                        </div>
+                                        <div class="server-stat-chip">
+                                            <span id="home-music-label">Müzik</span>
+                                            <strong id="home-music-chip">Bekliyor</strong>
+                                        </div>
+                                        <div class="server-stat-chip">
+                                            <span id="home-online-label">Aktif Üye</span>
+                                            <strong id="home-online-chip">0 kişi</strong>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="server-stat-chip">
-                                    <span id="home-voice-label">Sesli Oda</span>
-                                    <strong id="home-voice-chip">0 kişi</strong>
+                            </section>
+
+                            <!-- Hexagonal Server Node Cluster Matrix (As seen in Reference Image) -->
+                            <section class="hex-cluster-card">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                                    <span class="card-ttl" style="color:#38bdf8; display:flex; align-items:center; gap:6px;">
+                                        <i data-lucide="cpu" style="width:14px; height:14px;"></i> CLUSTER NODES (HONEYCOMB)
+                                    </span>
+                                    <span style="font-size:10px; color:#34d399; background:rgba(16,185,129,0.15); padding:3px 8px; border-radius:10px; font-weight:700;">99.98% ONLINE</span>
                                 </div>
-                                <div class="server-stat-chip">
-                                    <span id="home-music-label">Müzik</span>
-                                    <strong id="home-music-chip">Bekliyor</strong>
+
+                                <div class="hex-grid-wrapper">
+                                    <!-- Row 1: 3 nodes -->
+                                    <div class="hex-row-wrap">
+                                        <div class="hex-node online" title="Node Alpha - WebRTC Stream Gateway">
+                                            <i data-lucide="radio" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node online" title="Node Beta - Firebase Realtime DB">
+                                            <i data-lucide="database" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node online" title="Node Gamma - MQTT Mesh Broker">
+                                            <i data-lucide="wifi" class="hex-inner-icon"></i>
+                                        </div>
+                                    </div>
+                                    <!-- Row 2: 4 nodes -->
+                                    <div class="hex-row-wrap">
+                                        <div class="hex-node online" title="Node Delta - Auth Server">
+                                            <i data-lucide="shield-check" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node online" title="Node Epsilon - Audio Mixer">
+                                            <i data-lucide="volume-2" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node warning" title="Node Zeta - Latency Spikes Detected">
+                                            <i data-lucide="alert-triangle" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node online" title="Node Eta - CDN Relay">
+                                            <i data-lucide="server" class="hex-inner-icon"></i>
+                                        </div>
+                                    </div>
+                                    <!-- Row 3: 3 nodes -->
+                                    <div class="hex-row-wrap">
+                                        <div class="hex-node online" title="Node Theta - Video Stream Processor">
+                                            <i data-lucide="tv" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node warning" title="Node Iota - Memory Usage 84%">
+                                            <i data-lucide="alert-circle" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node online" title="Node Kappa - P2P Mesh Bridge">
+                                            <i data-lucide="share-2" class="hex-inner-icon"></i>
+                                        </div>
+                                    </div>
+                                    <!-- Row 4: 2 nodes -->
+                                    <div class="hex-row-wrap">
+                                        <div class="hex-node online" title="Node Lambda - Main Backup">
+                                            <i data-lucide="hard-drive" class="hex-inner-icon"></i>
+                                        </div>
+                                        <div class="hex-node online" title="Node Mu - Encryption Key Server">
+                                            <i data-lucide="lock" class="hex-inner-icon"></i>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="server-stat-chip">
-                                    <span id="home-online-label">Aktif Üye</span>
-                                    <strong id="home-online-chip">0 kişi</strong>
-                                </div>
-                            </div>
+                            </section>
                         </div>
-                        <div id="member-grid" class="member-grid"></div>
-                    </section>
+
+                        <!-- Right Column: Audio Waveform Visualizer & Analytics Graph -->
+                        <div style="display:flex; flex-direction:column; gap:16px;">
+                            <!-- Voice Stream Waveform Telemetry -->
+                            <section class="cyber-card">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                    <span class="card-ttl" style="color:#818cf8; display:flex; align-items:center; gap:6px;">
+                                        <i data-lucide="activity" style="width:14px; height:14px;"></i> AUDIO TELEMETRY
+                                    </span>
+                                    <span style="font-size:10px; color:#38bdf8; font-weight:700;">320 kbps HD</span>
+                                </div>
+                                <div class="waveform-container">
+                                    <div class="waveform-bar" style="animation-delay: 0.1s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.3s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.2s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.5s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.4s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.6s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.2s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.7s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.3s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.5s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.1s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.8s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.4s;"></div>
+                                    <div class="waveform-bar" style="animation-delay: 0.6s;"></div>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; font-size:10px; color:rgba(255,255,255,0.5); margin-top:8px;">
+                                    <span>Opket Spatial Voice Buffer</span>
+                                    <span>Latency: 12ms</span>
+                                </div>
+                            </section>
+
+                            <!-- Analytics Traffic & Bandwidth Chart -->
+                            <section class="analytics-card" style="margin-top:0;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <span class="card-ttl" style="color:#38bdf8; display:flex; align-items:center; gap:6px;">
+                                        <i data-lucide="bar-chart-3" style="width:14px; height:14px;"></i> LIVE TRAFFIC ANALYTICS
+                                    </span>
+                                    <span style="font-size:10px; color:#34d399; font-weight:700;">+14.8 KB/s</span>
+                                </div>
+                                <div class="analytics-graph-container">
+                                    <svg viewBox="0 0 400 120" class="analytics-graph-svg">
+                                        <defs>
+                                            <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.5"/>
+                                                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <line x1="0" y1="30" x2="400" y2="30" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4,4"/>
+                                        <line x1="0" y1="70" x2="400" y2="70" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4,4"/>
+                                        <path d="M0,90 Q40,40 80,70 T160,30 T240,60 T320,20 T400,50 L400,120 L0,120 Z" fill="url(#chartGlow)"/>
+                                        <path d="M0,90 Q40,40 80,70 T160,30 T240,60 T320,20 T400,50" fill="none" stroke="#38bdf8" stroke-width="2.5" filter="drop-shadow(0 0 6px #38bdf8)"/>
+                                        <path d="M0,105 Q50,85 100,95 T200,75 T300,85 T400,40" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="3,3" opacity="0.8"/>
+                                    </svg>
+                                </div>
+                                <div style="display:flex; justify-content:space-around; font-size:10px; color:rgba(255,255,255,0.6); margin-top:8px;">
+                                    <div><strong>Peak:</strong> 4.8 MB/s</div>
+                                    <div><strong>Avg Load:</strong> 18%</div>
+                                    <div><strong>Loss:</strong> 0.00%</div>
+                                </div>
+                            </section>
+
+                            <!-- Active Connected Members -->
+                            <section class="card server-shell" style="margin-top:0;">
+                                <div id="member-grid" class="member-grid"></div>
+                            </section>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- TAB: CHAT -->
