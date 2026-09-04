@@ -1,4 +1,4 @@
-const CACHE = 'opket-v121-member-presence-fix';
+const CACHE = 'opket-v122-global-admin-sync';
 const ASSETS = [
   './',
   './index.html',

@@ -7060,9 +7060,12 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                 if(this.canUseServerRegistry() && (!registryResult || registryResult.ok === false)) {
                     const code = registryResult?.error || '';
                     if(code === 'server_full') alert(this.getServerFullMessage());
-                    else if(code === 'server_not_found') alert(LANGS[this.lang]?.server_invalid || LANGS.en.server_invalid);
+                    else if(code === 'server_not_found' || code === 'server_invalid' || code === 'server_deleted') {
+                        alert('Sunucu bulunamadı. Bu sunucu silinmiş veya mevcut değil.');
+                        if (typeof removeJoinedServer === 'function') removeJoinedServer(serverId);
+                    }
                     else if(code === 'server_exists' && this.serverOwner) alert(this.getLangText('server_exists', 'This server code is already in use. Please try again.'));
-                    else alert(this.getLangText('server_registry_failed', 'The server registry could not be updated. Please try again.'));
+                    else alert('Sunucu bulunamadı. Bu sunucu silinmiş veya mevcut değil.');
                     return;
                 }
                   this.id = serverId;
@@ -15024,7 +15027,38 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
             renderJoinedServers();
         }
 
-        function renderJoinedServers() {
+        let isValidatingJoinedServers = false;
+        async function validateJoinedServersList() {
+            if (isValidatingJoinedServers) return;
+            isValidatingJoinedServers = true;
+            try {
+                const key = getJoinedServersKey();
+                let joined = JSON.parse(localStorage.getItem(key) || '[]');
+                if (!joined || joined.length === 0) {
+                    isValidatingJoinedServers = false;
+                    return;
+                }
+                let modified = false;
+                for (const code of joined) {
+                    try {
+                        const res = await fetch(`/api/server-registry?serverId=${encodeURIComponent(code)}`);
+                        const data = await res.json().catch(() => ({}));
+                        if (data && (data.exists === false || data.deleted === true || data.error === 'server_not_found')) {
+                            joined = joined.filter(c => c !== code);
+                            modified = true;
+                        }
+                    } catch(e) {}
+                }
+                if (modified) {
+                    localStorage.setItem(key, JSON.stringify(joined));
+                    renderJoinedServers(true);
+                }
+            } catch(e) {} finally {
+                isValidatingJoinedServers = false;
+            }
+        }
+
+        function renderJoinedServers(skipValidation = false) {
             const listEl = document.getElementById('joined-servers-list');
             const countEl = document.getElementById('joined-servers-count');
             if (!listEl) return;
@@ -15053,6 +15087,10 @@ en: { partner_lbl:"My Love", invite_btn:"COPY LINK 📋", welcome_sub:"Digital L
                     </div>
                 </div>
             `).join('');
+
+            if (!skipValidation) {
+                setTimeout(validateJoinedServersList, 300);
+            }
         }
 
         function quickJoinServer(code) {
