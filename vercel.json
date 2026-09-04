@@ -20,23 +20,15 @@
   "routes": [
     {
       "src": "/sitemap\\.xml",
-      "dest": "/static/sitemap.xml"
+      "dest": "/main.py"
     },
     {
       "src": "/robots\\.txt",
-      "dest": "/static/robots.txt"
-    },
-    {
-      "src": "/ads\\.txt",
-      "dest": "/static/ads.txt"
+      "dest": "/main.py"
     },
     {
       "src": "/googlea587dd58ff1846df\\.html",
-      "dest": "/static/googlea587dd58ff1846df.html"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "dest": "/main.py"
     },
     {
       "src": "/opket/?$",
@@ -87,7 +79,7 @@
       "dest": "/static/video.html"
     },
     {
-      "src": "^/(?!static/|api/|healthz|convert/|opket|vendor|assets).*$",
+      "src": "^/(?!static/|api/|healthz|convert/|opket|vendor|assets|sitemap\\.xml|robots\\.txt|googlea587dd58ff1846df\\.html).*$",
       "dest": "/static/index.html"
     }
   ]
