@@ -2,6 +2,18 @@
   "version": 2,
   "builds": [
     {
+      "src": "googlea587dd58ff1846df.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "sitemap.xml",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "robots.txt",
+      "use": "@vercel/static"
+    },
+    {
       "src": "main.py",
       "use": "@vercel/python",
       "config": {
@@ -18,6 +30,18 @@
     }
   ],
   "routes": [
+    {
+      "src": "/googlea587dd58ff1846df.html",
+      "dest": "/googlea587dd58ff1846df.html"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/sitemap.xml"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt"
+    },
     {
       "src": "/static/(.*)",
       "dest": "/static/$1"
@@ -63,19 +87,7 @@
       "dest": "/main.py"
     },
     {
-      "src": "/googlea587dd58ff1846df.html",
-      "dest": "/main.py"
-    },
-    {
-      "src": "/sitemap.xml",
-      "dest": "/main.py"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "/main.py"
-    },
-    {
-      "src": "/(converter\\.html|video\\.html|google.*\\.html|converter-logo.*|downloader-logo\\.png|downloader-favicon.*|ads\\.txt|robots\\.txt|sitemap\\.xml|favicon.*|apple-touch-icon.*)",
+      "src": "/(converter\\.html|video\\.html|converter-logo.*|downloader-logo\\.png|downloader-favicon.*|ads\\.txt|favicon.*|apple-touch-icon.*)",
       "dest": "/static/$1"
     },
     {
