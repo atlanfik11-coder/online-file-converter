@@ -2,73 +2,97 @@
 const tabConfig = {
     'pdf-to-word': {
         title: 'PDF to Word (.docx)',
+        title_en: 'PDF to Word (.docx)',
         desc: 'PDF dosyalarınızı düzenlenebilir Word (.docx) belgelerine yüksek kalitede dönüştürün.',
+        desc_en: 'Convert your PDF files to editable Word (.docx) documents in high quality.',
         multiple: false,
         accept: '.pdf',
         acceptLabel: 'Desteklenen format: .pdf',
+        acceptLabel_en: 'Supported format: .pdf',
         route: '/api/pdf-to-word',
         defaultFilename: 'converted.docx'
     },
     'word-to-pdf': {
         title: 'Word to PDF (.pdf)',
+        title_en: 'Word to PDF (.pdf)',
         desc: 'Word (.docx, .doc) dosyalarınızı kolayca PDF formatına dönüştürün.',
+        desc_en: 'Easily convert your Word (.docx, .doc) files to PDF format.',
         multiple: false,
         accept: '.docx,.doc',
         acceptLabel: 'Desteklenen formatlar: .doc, .docx',
+        acceptLabel_en: 'Supported formats: .doc, .docx',
         route: '/api/word-to-pdf',
         defaultFilename: 'converted.pdf'
     },
     'pdf-to-image': {
         title: 'PDF to Image (ZIP)',
+        title_en: 'PDF to Image (ZIP)',
         desc: 'PDF belgenizin her sayfasını görsel (PNG veya JPG) olarak dışa aktarın ve ZIP olarak indirin.',
+        desc_en: 'Export each page of your PDF as images (PNG or JPG) and download as ZIP.',
         multiple: false,
         accept: '.pdf',
         acceptLabel: 'Desteklenen format: .pdf',
+        acceptLabel_en: 'Supported format: .pdf',
         route: '/api/pdf-to-image',
         defaultFilename: 'pdf_images.zip'
     },
     'image-to-pdf': {
         title: 'Görsellerden PDF Yapıcı',
+        title_en: 'Image to PDF Maker',
         desc: 'Birden fazla görseli (PNG, JPG, WebP) tek bir PDF dosyası halinde birleştirin.',
+        desc_en: 'Combine multiple images (PNG, JPG, WebP) into a single PDF file.',
         multiple: true,
         accept: '.png,.jpg,.jpeg,.webp,.bmp',
         acceptLabel: 'Desteklenen formatlar: .png, .jpg, .jpeg, .webp, .bmp',
+        acceptLabel_en: 'Supported formats: .png, .jpg, .jpeg, .webp, .bmp',
         route: '/api/image-to-pdf',
         defaultFilename: 'images_combined.pdf'
     },
     'pdf-merge-encrypt': {
         title: 'PDF Birleştirme & Şifreleme',
+        title_en: 'PDF Merge & Encrypt',
         desc: 'Birden fazla PDF belgesini tek bir dosyada birleştirin ve isterseniz şifre koyarak koruyun.',
+        desc_en: 'Combine multiple PDF documents into one file and optionally encrypt with password.',
         multiple: true,
         accept: '.pdf',
         acceptLabel: 'Desteklenen formatlar: Birden çok .pdf',
+        acceptLabel_en: 'Supported formats: Multiple .pdf files',
         route: '/api/pdf-merge-encrypt',
         defaultFilename: 'merged_document.pdf'
     },
     'convert-image': {
         title: 'Görsel Dönüştürücü',
+        title_en: 'Image Converter',
         desc: 'Görsellerinizi WebP, PNG veya JPG formatları arasında hızlıca dönüştürün.',
+        desc_en: 'Quickly convert your images between WebP, PNG, or JPG formats.',
         multiple: false,
         accept: '.png,.jpg,.jpeg,.webp',
         acceptLabel: 'Desteklenen formatlar: .png, .jpg, .jpeg, .webp',
+        acceptLabel_en: 'Supported formats: .png, .jpg, .jpeg, .webp',
         route: '/api/convert-image',
         defaultFilename: 'converted_image.png'
     },
     'pdf-compress': {
         title: 'PDF Sıkıştırma (Compress PDF)',
+        title_en: 'PDF Compression',
         desc: 'PDF dosyalarınızın boyutunu kalite kaybı yaşamadan küçültün.',
+        desc_en: 'Reduce the file size of your PDFs without losing quality.',
         multiple: false,
         accept: '.pdf',
         acceptLabel: 'Desteklenen format: .pdf',
+        acceptLabel_en: 'Supported format: .pdf',
         route: '/convert/compress-pdf',
         defaultFilename: 'compressed.pdf'
     },
     'pdf-watermark': {
         title: 'PDF Filigran Ekleme (Watermark)',
+        title_en: 'PDF Watermark',
         desc: 'PDF sayfalarınıza özel yazı veya filigran ekleyin.',
+        desc_en: 'Add custom text or watermark overlay to your PDF pages.',
         multiple: false,
         accept: '.pdf',
         acceptLabel: 'Desteklenen format: .pdf',
+        acceptLabel_en: 'Supported format: .pdf',
         route: '/convert/watermark-pdf',
         defaultFilename: 'watermarked.pdf'
     }
@@ -138,13 +162,16 @@ function setupTabSwitcher() {
 
 // Update UI layout, headings, and input options depending on selected tab
 function updateUIForTab() {
+    const lang = localStorage.getItem('site_lang') || 'tr';
     const config = tabConfig[activeTab];
-    toolTitle.innerHTML = config.title;
-    toolDesc.innerHTML = config.desc;
-    acceptedFormats.innerHTML = config.acceptLabel;
-    
-    fileInput.accept = config.accept;
-    fileInput.multiple = config.multiple;
+    if (config) {
+        toolTitle.innerHTML = lang === 'en' ? (config.title_en || config.title) : config.title;
+        toolDesc.innerHTML = lang === 'en' ? (config.desc_en || config.desc) : config.desc;
+        acceptedFormats.innerHTML = lang === 'en' ? (config.acceptLabel_en || config.acceptLabel) : config.acceptLabel;
+        
+        fileInput.accept = config.accept;
+        fileInput.multiple = config.multiple;
+    }
     
     generateOptionsPanel();
     
@@ -477,3 +504,5 @@ function formatBytes(bytes, decimals = 2) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
+window.updateUIForTab = updateUIForTab;

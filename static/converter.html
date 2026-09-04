@@ -124,7 +124,7 @@
             <div class="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
                 <a href="/" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-750 text-slate-200 border border-slate-700/80 transition-all hover:scale-105 shadow-sm shrink-0">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-brand-purple"></i>
-                    <span>Ana Sayfa</span>
+                    <span data-i18n="navHome">Ana Sayfa</span>
                 </a>
                 <div class="h-5 w-px bg-slate-800 hidden sm:block"></div>
                 <div class="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -133,7 +133,7 @@
                         <span class="text-sm sm:text-lg font-bold tracking-tight text-white flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
                             Game <span class="gradient-text">of PDF</span>
                         </span>
-                        <span class="text-[9px] sm:text-[10px] text-purple-400 block -mt-0.5 tracking-wider uppercase font-semibold whitespace-nowrap">PDF Dönüştürücü</span>
+                        <span class="text-[9px] sm:text-[10px] text-purple-400 block -mt-0.5 tracking-wider uppercase font-semibold whitespace-nowrap" data-i18n="headerSubtitle">PDF Dönüştürücü</span>
                     </div>
                 </div>
             </div>
@@ -145,12 +145,12 @@
                 </button>
                 <span class="inline-flex items-center gap-1.5 py-1 px-2 sm:px-3 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span class="sm:hidden">Aktif</span>
-                    <span class="hidden sm:inline">Sunucu Aktif</span>
+                    <span class="sm:hidden" data-i18n="serverStatusMobile">Aktif</span>
+                    <span class="hidden sm:inline" data-i18n="serverStatus">Sunucu Aktif</span>
                 </span>
                 <span class="text-[10px] sm:text-xs text-slate-400 inline-flex items-center gap-1 whitespace-nowrap">
                     <i data-lucide="shield" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-brand-purple shrink-0"></i>
-                    <span class="hidden xs:inline">%100 Güvenli &</span> SSL<span class="hidden sm:inline"> Korumalı</span>
+                    <span class="hidden xs:inline" data-i18n="sslProtected">%100 Güvenli &amp; SSL Korumalı</span>
                 </span>
             </div>
         </div>
@@ -163,14 +163,14 @@
         <!-- Left Sidebar: Menu / Navigation Tabs -->
         <aside class="w-full lg:w-72 flex flex-col gap-6 shrink-0">
             <div class="glass-panel rounded-2xl p-5">
-                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 px-2">Dönüştürme Araçları</h2>
+                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 px-2" data-i18n="toolsSidebarTitle">Dönüştürme Araçları</h2>
                 
                 <nav class="space-y-1.5" id="nav-tabs">
                     <!-- Tab 1: PDF to Word -->
                     <button data-tab="pdf-to-word" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 bg-gradient-to-r from-brand-purple/10 to-brand-indigo/10 text-white border border-brand-purple/30 shadow-md">
                         <span class="flex items-center gap-3">
                             <i data-lucide="file-text" class="w-4 h-4 text-purple-400"></i>
-                            PDF to Word (.docx)
+                            <span data-i18n="tabPdfWord">PDF to Word (.docx)</span>
                         </span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-80"></i>
                     </button>
@@ -179,7 +179,7 @@
                     <button data-tab="word-to-pdf" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
                         <span class="flex items-center gap-3">
                             <i data-lucide="file-output" class="w-4 h-4 text-indigo-400"></i>
-                            Word to PDF (.pdf)
+                            <span data-i18n="tabWordPdf">Word to PDF (.pdf)</span>
                         </span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                     </button>
@@ -188,7 +188,7 @@
                     <button data-tab="pdf-to-image" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
                         <span class="flex items-center gap-3">
                             <i data-lucide="file-image" class="w-4 h-4 text-emerald-400"></i>
-                            PDF to Image (JPG/PNG)
+                            <span data-i18n="tabPdfImage">PDF to Image (JPG/PNG)</span>
                         </span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
                     </button>
@@ -197,7 +197,7 @@
                     <button data-tab="image-to-pdf" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
                         <span class="flex items-center gap-3">
                             <i data-lucide="images" class="w-4 h-4 text-blue-400"></i>
-                            Image to PDF
+                            <span data-i18n="tabImagePdf">Image to PDF</span>
                         </span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
                     </button>
@@ -206,7 +206,7 @@
                     <button data-tab="pdf-merge-encrypt" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
                         <span class="flex items-center gap-3">
                             <i data-lucide="lock" class="w-4 h-4 text-pink-400"></i>
-                            PDF Birleştir & Şifrele
+                            <span data-i18n="tabPdfMerge">PDF Birleştir &amp; Şifrele</span>
                         </span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
                     </button>
@@ -215,7 +215,7 @@
                     <button data-tab="convert-image" class="tab-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all duration-200 text-slate-300 hover:bg-slate-800/40 hover:text-white border border-transparent">
                         <span class="flex items-center gap-3">
                             <i data-lucide="image" class="w-4 h-4 text-amber-400"></i>
-                            Görsel Dönüştürücü
+                            <span data-i18n="tabImageConvert">Görsel Dönüştürücü</span>
                         </span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0"></i>
                     </button>
@@ -261,7 +261,7 @@
                     <div id="file-limits" class="shrink-0">
                         <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-lg text-xs bg-slate-800 text-slate-300 font-medium">
                             <i data-lucide="info" class="w-3.5 h-3.5 text-brand-purple"></i>
-                            Dosya Sınırı: 50 MB
+                            <span data-i18n="fileLimit">Dosya Sınırı: 50 MB</span>
                         </span>
                     </div>
                 </div>
@@ -281,7 +281,7 @@
                                 <i data-lucide="cloud-upload" class="w-10 h-10 text-brand-purple"></i>
                             </div>
                             <div>
-                                <p class="text-base font-semibold text-white">
+                                <p class="text-base font-semibold text-white" data-i18n="dropPrompt">
                                     Dosyaları buraya sürükleyip bırakın veya <span class="text-brand-purple underline decoration-dotted">göz atın</span>
                                 </p>
                                 <p id="accepted-formats" class="text-xs text-slate-400 mt-1">
@@ -329,7 +329,7 @@
                     <!-- Submit Action Button -->
                     <button type="submit" id="submit-btn" disabled class="w-full py-4 px-6 rounded-xl font-bold text-white gradient-btn flex items-center justify-center gap-2 cursor-pointer shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
                         <i data-lucide="zap" class="w-5 h-5"></i>
-                        <span id="submit-btn-text">Dönüştürmeyi Başlat</span>
+                        <span id="submit-btn-text" data-i18n="submitText">Dönüştürmeyi Başlat</span>
                     </button>
                 </form>
 
@@ -360,19 +360,100 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2">
                 <span class="text-lg font-bold tracking-tight text-white">Game <span class="gradient-text">of PDF</span></span>
-                <span class="text-xs text-slate-500 border-l border-slate-700 pl-2">© 2026 Tüm Hakları Saklıdır.</span>
+                <span class="text-xs text-slate-500 border-l border-slate-700 pl-2" data-i18n="copyright">© 2026 Tüm Hakları Saklıdır.</span>
             </div>
             
             <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
-                <a href="/" class="hover:text-white transition-colors">Ana Sayfa</a>
-                <a href="/opket" class="hover:text-white transition-colors">Opket Platformu</a>
-                <a href="/video" class="hover:text-white transition-colors">Video İndirici</a>
-                <a href="#" class="hover:text-white transition-colors">Gizlilik Politikası</a>
+                <a href="/" class="hover:text-white transition-colors" data-i18n="footerHome">Ana Sayfa</a>
+                <a href="/opket" class="hover:text-white transition-colors" data-i18n="footerOpket">Opket Platformu</a>
+                <a href="/video" class="hover:text-white transition-colors" data-i18n="footerVideo">Video İndirici</a>
+                <a href="#" class="hover:text-white transition-colors" data-i18n="footerPrivacy">Gizlilik Politikası</a>
             </div>
         </div>
     </footer>
 
     <!-- Frontend logic app.js link -->
     <script src="/static/app.js"></script>
-</body>
+
+    <script>
+        const translations = {
+            tr: {
+                navHome: 'Ana Sayfa',
+                headerSubtitle: 'PDF Dönüştürücü',
+                serverStatus: 'Sunucu Aktif',
+                serverStatusMobile: 'Aktif',
+                sslProtected: '%100 Güvenli & SSL Korumalı',
+                toolsSidebarTitle: 'Dönüştürme Araçları',
+                tabPdfWord: 'PDF to Word (.docx)',
+                tabWordPdf: 'Word to PDF (.pdf)',
+                tabPdfImage: 'PDF to Image (JPG/PNG)',
+                tabImagePdf: 'Image to PDF',
+                tabPdfMerge: 'PDF Birleştir & Şifrele',
+                tabImageConvert: 'Görsel Dönüştürücü',
+                tabCompress: 'PDF Sıkıştırma',
+                tabWatermark: 'PDF Filigran Ekleme',
+                fileLimit: 'Dosya Sınırı: 50 MB',
+                dropPrompt: 'Dosyaları buraya sürükleyip bırakın veya <span class="text-brand-purple underline decoration-dotted">göz atın</span>',
+                submitText: 'Dönüştürmeyi Başlat',
+                footerHome: 'Ana Sayfa',
+                footerOpket: 'Opket Platformu',
+                footerVideo: 'Video İndirici',
+                footerPrivacy: 'Gizlilik Politikası',
+                copyright: '© 2026 Tüm Hakları Saklıdır.'
+            },
+            en: {
+                navHome: 'Home',
+                headerSubtitle: 'PDF Converter',
+                serverStatus: 'Server Online',
+                serverStatusMobile: 'Active',
+                sslProtected: '100% Secure & SSL Protected',
+                toolsSidebarTitle: 'Conversion Tools',
+                tabPdfWord: 'PDF to Word (.docx)',
+                tabWordPdf: 'Word to PDF (.pdf)',
+                tabPdfImage: 'PDF to Image (JPG/PNG)',
+                tabImagePdf: 'Image to PDF',
+                tabPdfMerge: 'Merge & Encrypt PDF',
+                tabImageConvert: 'Image Converter',
+                tabCompress: 'PDF Compression',
+                tabWatermark: 'PDF Watermark',
+                fileLimit: 'File Limit: 50 MB',
+                dropPrompt: 'Drag & drop files here or <span class="text-brand-purple underline decoration-dotted">browse</span>',
+                submitText: 'Start Conversion',
+                footerHome: 'Home',
+                footerOpket: 'Opket Platform',
+                footerVideo: 'Video Downloader',
+                footerPrivacy: 'Privacy Policy',
+                copyright: '© 2026 All Rights Reserved.'
+            }
+        };
+
+        let currentLang = localStorage.getItem('site_lang') || 'tr';
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('site_lang', lang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+            const btnText = document.getElementById('langBtnText');
+            if (btnText) {
+                btnText.textContent = lang === 'tr' ? '🇬🇧 English' : '🇹🇷 Türkçe';
+            }
+            if (typeof updateUIForTab === 'function') {
+                updateUIForTab();
+            }
+        }
+
+        function toggleLanguage() {
+            const nextLang = currentLang === 'tr' ? 'en' : 'tr';
+            applyLanguage(nextLang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage(currentLang);
+        });
+    </script>
 </html>
