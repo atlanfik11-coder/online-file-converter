@@ -19,12 +19,8 @@
   ],
   "routes": [
     {
-      "src": "/sitemap\\.xml",
-      "dest": "/api/sitemap.js"
-    },
-    {
-      "src": "/robots\\.txt",
-      "dest": "/api/robots.js"
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     },
     {
       "src": "/opket/?$",
@@ -51,7 +47,7 @@
       "dest": "/static/opket/sw.js"
     },
     {
-      "src": "/api/(admin-servers|admin-session|health|music-autoplay|music-search|realtime-auth|runtime-config|server-registry|download|download-file|sitemap|robots)",
+      "src": "/api/(admin-servers|admin-session|health|music-autoplay|music-search|realtime-auth|runtime-config|server-registry|download|download-file)",
       "dest": "/api/$1.js"
     },
     {
@@ -67,6 +63,18 @@
       "dest": "/main.py"
     },
     {
+      "src": "/sitemap\\.xml",
+      "dest": "/main.py"
+    },
+    {
+      "src": "/robots\\.txt",
+      "dest": "/main.py"
+    },
+    {
+      "src": "/googlea587dd58ff1846df\\.html",
+      "dest": "/main.py"
+    },
+    {
       "src": "/converter/?$",
       "dest": "/static/converter.html"
     },
@@ -75,7 +83,7 @@
       "dest": "/static/video.html"
     },
     {
-      "src": "^/(?!static/|api/|healthz|convert/|opket|vendor|assets|sitemap\\.xml|robots\\.txt).*$",
+      "src": "^/(?!static/|api/|healthz|convert/|opket|vendor|assets|sitemap\\.xml|robots\\.txt|googlea587dd58ff1846df\\.html).*$",
       "dest": "/static/index.html"
     }
   ]
